@@ -1,0 +1,119 @@
+{
+  "checked_at": "2026-10-18T20:47+02:00",
+  "coverage": {
+    "failed_queries_24h": 0,
+    "failed_query_examples": [],
+    "queries_planned": 196,
+    "queries_checked_24h": 8,
+    "queries_responded_24h": 8,
+    "watch_rules_total": 75,
+    "watch_rules_with_search_24h": 2,
+    "coverage_window_hours": 240.0,
+    "queries_checked_window": 8,
+    "queries_responded_window": 8,
+    "watch_rules_with_search_window": 2,
+    "by_store": {
+      "Rohlík": {
+        "planned": 98,
+        "attempted_24h": 4,
+        "responded_24h": 4
+      },
+      "Košík": {
+        "planned": 98,
+        "attempted_24h": 4,
+        "responded_24h": 4
+      }
+    },
+    "batch_queries": 8,
+    "batch_product_rows_matched": 69,
+    "batch_errors": 0,
+    "catalog_completeness_verified": false,
+    "warning": "Vyhledávací dotazy napříč katalogy, nikoli úplný export obou e-shopů. Neúplnost, blokace a změny cen jsou možné.",
+    "sale_page_fallback": {
+      "Rohlík": {
+        "status": "ok",
+        "cards": 282,
+        "matched_offers": 9
+      },
+      "Košík": {
+        "status": "ok",
+        "cards": 383,
+        "matched_offers": 6
+      }
+    }
+  },
+  "queries": {
+    "Rohlík::kuřecí prsní řízky": {
+      "checked_at": "2026-10-18T20:47+02:00",
+      "status": "ok",
+      "cards": 65,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W001"
+      ]
+    },
+    "Košík::kuřecí prsní řízky": {
+      "checked_at": "2026-10-18T20:47+02:00",
+      "status": "ok",
+      "cards": 10,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W001"
+      ]
+    },
+    "Rohlík::kuřecí prsa": {
+      "checked_at": "2026-10-18T20:47+02:00",
+      "status": "ok",
+      "cards": 179,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W001"
+      ]
+    },
+    "Košík::kuřecí prsa": {
+      "checked_at": "2026-10-18T20:47+02:00",
+      "status": "ok",
+      "cards": 16,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W001"
+      ]
+    },
+    "Rohlík::kuřecí stehna": {
+      "checked_at": "2026-10-18T20:47+02:00",
+      "status": "ok",
+      "cards": 29,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W002"
+      ]
+    },
+    "Košík::kuřecí stehna": {
+      "checked_at": "2026-10-18T20:47+02:00",
+      "status": "ok",
+      "cards": 28,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W002"
+      ]
+    },
+    "Rohlík::kuřecí paličky": {
+      "checked_at": "2026-10-18T20:47+02:00",
+      "status": "ok",
+      "cards": 11,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W002"
+      ]
+    },
+    "Košík::kuřecí paličky": {
+      "checked_at": "2026-10-18T20:47+02:00",
+      "status": "ok",
+      "cards": 14,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W002"
+      ]
+    }
+  }
+}
