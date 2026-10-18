@@ -1,11 +1,11 @@
-ROHLÍK × KOŠÍK | 2026-10-18 | poslední kontrola: 2026-10-18T21:00+02:00
+ROHLÍK × KOŠÍK | 2026-10-18 | poslední kontrola: 2026-10-18T21:03+02:00
 VEŘEJNÉ VYHLEDÁVÁNÍ NAPŘÍČ SORTIMENTEM – pouze skutečně nalezené položky, nikoli úplný katalog.
 Doručovací oblast: PSČ 149 00 (referenční požadavek, nikoli automaticky ověřená lokální cena).
 Bez potvrzené volby oblasti v e-shopu: ceny a dostupnost se mohou lišit podle doručovací adresy / členství.
-STAV ZDROJŮ: Rohlík: ok (58 karet); Košík: ok (87 karet)
-Nalezeno 27 sledovaných zlevněných položek; nově zaznamenané / zlevněné: 7.
+STAV ZDROJŮ: Rohlík: ok (71 karet); Košík: ok (113 karet)
+Nalezeno 30 sledovaných zlevněných položek; nově zaznamenané / zlevněné: 3.
 OBLÍBENÉ PRODUKTY A ZNAČKY (všechna zadaná pravidla = oblíbené):
-KATALOG: 145 nalezených výrobků (včetně nezlevněných); 24h pokrytí vyhledávacích dotazů 16/196 a nákupních pravidel 6/75. Neznamená úplný katalog.
+KATALOG: 184 nalezených výrobků (včetně nezlevněných); 24h pokrytí vyhledávacích dotazů 24/196 a nákupních pravidel 12/75. Neznamená úplný katalog.
 ★ Ovoce | Rohlík | Hrozny tmavé volně (odr. Red globe) , střapec, cca 0,8 kg, -50 % pro vás, , 55,92 Kč, 69,90 Kč/kg | balení: 0,8 kg | 111.92 Kč | -50% | akce | bez ověřeného páru | https://www.rohlik.cz/1356399-hrozny-tmave-volne-odr-red-globe-strapec
 ★ Majonézy | Košík | Hellmann's Majonéza | balení: 405 ml | 46.90 Kč | -47% | akce | bez ověřeného páru | https://www.kosik.cz/p459240-hellmann-s-majoneza
 ★ Majonézy | Košík | Hellmann's Majonéza | balení: 625 ml | 74.90 Kč | -42% | akce | bez ověřeného páru | https://www.kosik.cz/p459210-hellmann-s-majoneza
@@ -17,6 +17,7 @@ KATALOG: 145 nalezených výrobků (včetně nezlevněných); 24h pokrytí vyhle
 ★ Zelenina | Rohlík | BIO Mrkev, balení, cca 500 g, -37 % do 19. 10.,BIO, , 24,95 Kč, 49,90 Kč/kg | balení: 500 g | 39.95 Kč | -37% | akce | bez ověřeného páru | https://www.rohlik.cz/1411188-bio-mrkev-baleni
 ★ Zelenina | Košík | Mrkev s natí, svazek | balení: 500 g | 24.90 Kč | -37% | akce | bez ověřeného páru | https://www.kosik.cz/p296834-mrkev-s-nati-svazek
 ★ Sýry / plísňové | Košík | Président Camembert | balení: 90 g | 29.90 Kč | -37% | akce | bez ověřeného páru | https://www.kosik.cz/p14827-president-camembert
+★ Uzeniny / šunky | Košík | Kostelecké Uzeniny Poctivá Šunka od kosti (92% masa) | balení: 100 g | 32.90 Kč | -34% | akce | bez ověřeného páru | https://www.kosik.cz/p20107-kostelecke-uzeniny-poctiva-sunka-od-kosti-92-masa
 ★ Uzeniny / šunky | Košík | Le & Co Pražská šunka nejvyšší jakosti shaved (95% masa) | balení: 100 g | 29.90 Kč | -34% | akce | bez ověřeného páru | https://www.kosik.cz/p19727-le-co-prazska-sunka-nejvyssi-jakosti-shaved-95-masa
 ★ Másla a tuky | Rohlík | Flora Original, 400 g, -33 % do 19. 10., , 54,90 Kč, 137,25 Kč/kg | balení: 400 g | 82.40 Kč | -33% | akce | bez ověřeného páru | https://www.rohlik.cz/726425-flora-original | POZN.: Rostlinný/ztužený tuk, není klasické máslo.
 ★ Maso | Košík | Kuřecí prsní řízek bez kosti a kůže | balení: 500 g | 74.95 Kč | -28% | akce | bez ověřeného páru | https://www.kosik.cz/p681032-kureci-prsni-rizek-bez-kosti-a-kuze
@@ -24,6 +25,8 @@ KATALOG: 145 nalezených výrobků (včetně nezlevněných); 24h pokrytí vyhle
 ★ Maso | Rohlík | Campese Kuřecí vykostěná stehna z volného chovu, cca 290 g, -27 % pro vás, , 117,69 Kč, 399,90 Kč/kg | balení: 290 g | 161.84 Kč | -27% | akce | bez ověřeného páru | https://www.rohlik.cz/1482633-campese-kureci-vykostena-stehna-z-volneho-chovu
 ★ Sýry / plátkové | Rohlík | Leerdammer Lightlife sýr plátky, 100 g, -27 % do 19. 10., , 37,90 Kč, 379,00 Kč/kg | balení: 100 g | 52.40 Kč | -27% | akce | bez ověřeného páru | https://www.rohlik.cz/1289779-leerdammer-lightlife-syr-platky
 ★ Sýry / plátkové | Rohlík | Leerdammer Original sýr plátky, 100 g, -27 % do 19. 10., , 37,90 Kč, 379,00 Kč/kg | balení: 100 g | 52.40 Kč | -27% | akce | bez ověřeného páru | https://www.rohlik.cz/761987-leerdammer-original-syr-platky
+★ Uzeniny / párky a klobásy | Košík | Kostelecké Uzeniny Poctivý vídeňský párek | balení: 180 g | 59.90 Kč | -25% | akce | bez ověřeného páru | https://www.kosik.cz/p20147-kostelecke-uzeniny-poctivy-vidensky-parek
+★ Uzeniny / šunky | Košík | Kostelecké Uzeniny Poctivá pečená šunka nejvyšší jakosti (95% masa) | balení: 100 g | 36.90 Kč | -22% | akce | bez ověřeného páru | https://www.kosik.cz/p20177-kostelecke-uzeniny-poctiva-pecena-sunka-nejvyssi-jakosti-95-masa
 ★ Maso | Košík | GymBeam Kuřecí prsa ve slunečnicovém oleji | balení: 155 g | 69.90 Kč | -22% | akce | bez ověřeného páru | https://www.kosik.cz/p809152-gymbeam-kureci-prsa-ve-slunecnicovem-oleji
 ★ Maso | Košík | Rabbit Kuřecí stehna spodní | balení: 580 g | 52.14 Kč | -18% | akce | bez ověřeného páru | https://www.kosik.cz/p681072-rabbit-kureci-stehna-spodni
 ★ Úklid | Rohlík | Domestos Ultra white and shine tekutý dezinfekční a čistící přípravek, 0,75 l, -16 % do 19. 10., , 49,90 Kč, 66,53 Kč/l | balení: 0,75 l | 59.90 Kč | -16% | akce | bez ověřeného páru | https://www.rohlik.cz/1339945-domestos-ultra-white-and-shine-tekuty-dezinfekcni-a-cistici-pripravek
