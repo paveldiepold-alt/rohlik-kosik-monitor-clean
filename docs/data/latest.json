@@ -1,0 +1,18 @@
+{
+  "date": null,
+  "checked_at": null,
+  "sources": {},
+  "source_urls": {},
+  "delivery": {
+    "postal_code": "149 00",
+    "postcode_specific_prices_verified": false
+  },
+  "catalog": [],
+  "offers": [],
+  "catalog_coverage": {
+    "warning": "Sběr ještě neproběhl; nejsou k dispozici ověřené ceny ani slevy."
+  },
+  "changes": [],
+  "demo": false,
+  "disclaimer": "První automatická kontrola zatím neproběhla."
+}

@@ -1,0 +1,1820 @@
+{
+  "version": "19.0-clean",
+  "timezone": "Europe/Prague",
+  "monitoring": {
+    "favorite_min_discount_pct": 5,
+    "brand_min_discount_pct": 15,
+    "notify_once_per_day": true,
+    "free_plan_daypart": "morning",
+    "interpret_watch_rules_as_favorites": true,
+    "description": "Všechna pravidla včetně nových papírových výrobků mají P1. Zewa balíčkové kapesníky jsou jen Deluxe Standard/Family; papírové kuchyňské utěrky a krabičkové 3vrstvé kapesníky mohou být jakékoli značky.",
+    "coverage_notice": "Prohledávaný celý veřejný sortiment pomocí dotazů po značkách a kategoriích. Každá skupina × každý obchod, stav a nedostupné dotazy se zaznamenávají. Nelze garantovat úplnost sortimentu ani lokální cenu pro PSČ."
+  },
+  "favorite_min_discount_pct": 5,
+  "max_items_per_store": 3500,
+  "watch_rules": [
+    {
+      "id": "W001",
+      "category": "Maso",
+      "label": "Kuřecí prsní řízky (syrové)",
+      "priority": 1,
+      "product_any": [
+        "kuřecí prs*",
+        "kuřecí říz*",
+        "prsní říz*"
+      ],
+      "exclude_any": [
+        "obalované",
+        "smažen*",
+        "nugget*",
+        "marinovan*",
+        "krůtí řízky",
+        "hotové jídlo",
+        "krůtí",
+        "krůtí prsa"
+      ]
+    },
+    {
+      "id": "W002",
+      "category": "Maso",
+      "label": "Kuřecí stehna (syrová)",
+      "priority": 1,
+      "product_any": [
+        "kuřecí stehn*",
+        "kuřecí vykostěn*",
+        "kuřecí horní stehn*",
+        "kuřecí spodní stehn*",
+        "kuřecí paličk*",
+        "kuřecí stehenní"
+      ],
+      "exclude_any": [
+        "krůtí stehna",
+        "smažen*",
+        "pečen*",
+        "marinovan*",
+        "hotové jídlo",
+        "krůtí"
+      ]
+    },
+    {
+      "id": "W003",
+      "category": "Maso",
+      "label": "Vepřová krkovice",
+      "priority": 1,
+      "product_any": [
+        "vepřová krkovic*",
+        "krkovice vepř*",
+        "krkovic*"
+      ],
+      "exclude_any": [
+        "uzená",
+        "grilovan*",
+        "marinovan*",
+        "hotové jídlo"
+      ]
+    },
+    {
+      "id": "W004",
+      "category": "Maso",
+      "label": "Vepřová panenka",
+      "priority": 1,
+      "product_any": [
+        "vepřová panenk*",
+        "panenka vepř*"
+      ],
+      "exclude_any": [
+        "medailonky v omáčce",
+        "hotové jídlo",
+        "marinovan*"
+      ]
+    },
+    {
+      "id": "W005",
+      "category": "Maso",
+      "label": "Hovězí svíčková (maso)",
+      "priority": 1,
+      "product_any": [
+        "hovězí svíčkov*",
+        "svíčková hovězí",
+        "svíčková pravá"
+      ],
+      "exclude_any": [
+        "hotové jídlo",
+        "svíčková na smetaně",
+        "falešná",
+        "svíčková omáčk*"
+      ]
+    },
+    {
+      "id": "W006",
+      "category": "Uzeniny / šunky",
+      "label": "Šunky – LE & CO",
+      "priority": 1,
+      "brand_aliases": [
+        "LE & CO",
+        "LE&CO",
+        "Le Co"
+      ],
+      "product_any": [
+        "šunk*",
+        "šunka",
+        "šunková"
+      ],
+      "exclude_any": [
+        "pizza",
+        "bageta",
+        "sendvič",
+        "sýrová pomazánka"
+      ]
+    },
+    {
+      "id": "W007",
+      "category": "Uzeniny / šunky",
+      "label": "Šunky – Chodura",
+      "priority": 1,
+      "brand_aliases": [
+        "Chodura",
+        "Chodur"
+      ],
+      "product_any": [
+        "šunk*",
+        "šunka",
+        "šunková"
+      ],
+      "exclude_any": [
+        "pizza",
+        "bageta",
+        "sendvič",
+        "sýrová pomazánka"
+      ]
+    },
+    {
+      "id": "W008",
+      "category": "Uzeniny / šunky",
+      "label": "Šunky – Wein",
+      "priority": 1,
+      "brand_aliases": [
+        "Wein"
+      ],
+      "product_any": [
+        "šunk*",
+        "šunka",
+        "šunková"
+      ],
+      "exclude_any": [
+        "pizza",
+        "bageta",
+        "sendvič",
+        "sýrová pomazánka"
+      ]
+    },
+    {
+      "id": "W009",
+      "category": "Uzeniny / šunky",
+      "label": "Šunky – Kostelecké uzeniny",
+      "priority": 1,
+      "brand_aliases": [
+        "Kostelecké",
+        "Kostelecké uzeniny"
+      ],
+      "product_any": [
+        "šunk*",
+        "šunka",
+        "šunková"
+      ],
+      "exclude_any": [
+        "pizza",
+        "bageta",
+        "sendvič",
+        "sýrová pomazánka"
+      ]
+    },
+    {
+      "id": "W010",
+      "category": "Uzeniny / salámy",
+      "label": "Salámy – Kmotr",
+      "priority": 1,
+      "brand_aliases": [
+        "Kmotr"
+      ],
+      "product_any": [
+        "salám*",
+        "salám",
+        "vysočin*",
+        "poličan*",
+        "herkul*",
+        "lovecký salám",
+        "uherský"
+      ],
+      "exclude_any": [
+        "pizza",
+        "bageta",
+        "sendvič"
+      ]
+    },
+    {
+      "id": "W011",
+      "category": "Uzeniny / salámy",
+      "label": "Salámy – Chodura",
+      "priority": 1,
+      "brand_aliases": [
+        "Chodura",
+        "Chodur"
+      ],
+      "product_any": [
+        "salám*",
+        "salám",
+        "vysočin*",
+        "poličan*",
+        "herkul*",
+        "lovecký salám",
+        "uherský"
+      ],
+      "exclude_any": [
+        "pizza",
+        "bageta",
+        "sendvič"
+      ]
+    },
+    {
+      "id": "W012",
+      "category": "Uzeniny / salámy",
+      "label": "Salámy – Ponnath",
+      "priority": 1,
+      "brand_aliases": [
+        "Ponnath"
+      ],
+      "product_any": [
+        "salám*",
+        "salám",
+        "vysočin*",
+        "poličan*",
+        "herkul*",
+        "lovecký salám",
+        "uherský"
+      ],
+      "exclude_any": [
+        "pizza",
+        "bageta",
+        "sendvič"
+      ]
+    },
+    {
+      "id": "W013",
+      "category": "Uzeniny / salámy",
+      "label": "Salámy – Krahulík",
+      "priority": 1,
+      "brand_aliases": [
+        "Krahulík",
+        "Krahulik"
+      ],
+      "product_any": [
+        "salám*",
+        "salám",
+        "vysočin*",
+        "poličan*",
+        "herkul*",
+        "lovecký salám",
+        "uherský"
+      ],
+      "exclude_any": [
+        "pizza",
+        "bageta",
+        "sendvič"
+      ]
+    },
+    {
+      "id": "W014",
+      "category": "Uzeniny / párky a klobásy",
+      "label": "Párky a klobásy – Ponnath",
+      "priority": 1,
+      "brand_aliases": [
+        "Ponnath"
+      ],
+      "product_any": [
+        "pár*",
+        "klobás*",
+        "špekáčk*",
+        "vídeňsk*"
+      ],
+      "exclude_any": [
+        "hotové jídlo"
+      ]
+    },
+    {
+      "id": "W015",
+      "category": "Uzeniny / párky a klobásy",
+      "label": "Párky a klobásy – Chodura",
+      "priority": 1,
+      "brand_aliases": [
+        "Chodura",
+        "Chodur"
+      ],
+      "product_any": [
+        "pár*",
+        "klobás*",
+        "špekáčk*",
+        "vídeňsk*"
+      ],
+      "exclude_any": [
+        "hotové jídlo"
+      ]
+    },
+    {
+      "id": "W016",
+      "category": "Uzeniny / párky a klobásy",
+      "label": "Párky a klobásy – Kostelecké uzeniny",
+      "priority": 1,
+      "brand_aliases": [
+        "Kostelecké",
+        "Kostelecké uzeniny"
+      ],
+      "product_any": [
+        "pár*",
+        "klobás*",
+        "špekáčk*",
+        "vídeňsk*"
+      ],
+      "exclude_any": [
+        "hotové jídlo"
+      ]
+    },
+    {
+      "id": "W017",
+      "category": "Sýry / plátkové",
+      "label": "Plátkové sýry – MADETA",
+      "priority": 1,
+      "brand_aliases": [
+        "MADETA"
+      ],
+      "product_any": [
+        "plátk*",
+        "plátkov*",
+        "eidam*",
+        "goud*",
+        "ementál*",
+        "emmental*",
+        "toastový sýr"
+      ],
+      "exclude_any": [
+        "bloček",
+        "kostka",
+        "strouhan*"
+      ]
+    },
+    {
+      "id": "W018",
+      "category": "Sýry / plátkové",
+      "label": "Plátkové sýry – Leerdammer",
+      "priority": 1,
+      "brand_aliases": [
+        "Leerdammer"
+      ],
+      "product_any": [
+        "plátk*",
+        "plátkov*",
+        "eidam*",
+        "goud*",
+        "ementál*",
+        "emmental*",
+        "toastový sýr"
+      ],
+      "exclude_any": [
+        "bloček",
+        "kostka",
+        "strouhan*"
+      ]
+    },
+    {
+      "id": "W019",
+      "category": "Sýry / plátkové",
+      "label": "Plátkové sýry – Président",
+      "priority": 1,
+      "brand_aliases": [
+        "Président",
+        "President"
+      ],
+      "product_any": [
+        "plátk*",
+        "plátkov*",
+        "eidam*",
+        "goud*",
+        "ementál*",
+        "emmental*",
+        "toastový sýr"
+      ],
+      "exclude_any": [
+        "bloček",
+        "kostka",
+        "strouhan*"
+      ]
+    },
+    {
+      "id": "W020",
+      "category": "Sýry / tavené",
+      "label": "Želetava Smetanito",
+      "priority": 1,
+      "brand_aliases": [
+        "Želetava",
+        "Smetanito"
+      ],
+      "product_any": [
+        "smetanito"
+      ],
+      "note": "Správný název řady je Smetanito (nikoliv Smetanino)."
+    },
+    {
+      "id": "W021",
+      "category": "Sýry / tavené",
+      "label": "Veselá kráva",
+      "priority": 1,
+      "brand_aliases": [
+        "Veselá kráva",
+        "Vesela Krava"
+      ],
+      "product_any": [
+        "taven*",
+        "smetanov*",
+        "sýr",
+        "syr"
+      ]
+    },
+    {
+      "id": "W022",
+      "category": "Sýry / tavené",
+      "label": "Madeta Lipno",
+      "priority": 1,
+      "brand_aliases": [
+        "Madeta",
+        "Lipno"
+      ],
+      "product_any": [
+        "lipno"
+      ]
+    },
+    {
+      "id": "W023",
+      "category": "Sýry / plísňové",
+      "label": "Plísňové sýry – Král Sýrů",
+      "priority": 1,
+      "brand_aliases": [
+        "Král Sýrů",
+        "Král Sýru",
+        "Král sýrů"
+      ],
+      "product_any": [
+        "hermelín*",
+        "camembert*",
+        "brie",
+        "plísňov*",
+        "niva",
+        "král sýrů",
+        "sedlčanský",
+        "sedlčanské"
+      ],
+      "exclude_any": [
+        "dresink",
+        "pomazánk*",
+        "omáčk*"
+      ]
+    },
+    {
+      "id": "W024",
+      "category": "Sýry / plísňové",
+      "label": "Plísňové sýry – Sedlčanský",
+      "priority": 1,
+      "brand_aliases": [
+        "Sedlčanský",
+        "Sedlčanské"
+      ],
+      "product_any": [
+        "hermelín*",
+        "camembert*",
+        "brie",
+        "plísňov*",
+        "niva",
+        "král sýrů",
+        "sedlčanský",
+        "sedlčanské"
+      ],
+      "exclude_any": [
+        "dresink",
+        "pomazánk*",
+        "omáčk*"
+      ]
+    },
+    {
+      "id": "W025",
+      "category": "Sýry / plísňové",
+      "label": "Plísňové sýry – Président",
+      "priority": 1,
+      "brand_aliases": [
+        "Président",
+        "President"
+      ],
+      "product_any": [
+        "hermelín*",
+        "camembert*",
+        "brie",
+        "plísňov*",
+        "niva",
+        "král sýrů",
+        "sedlčanský",
+        "sedlčanské"
+      ],
+      "exclude_any": [
+        "dresink",
+        "pomazánk*",
+        "omáčk*"
+      ]
+    },
+    {
+      "id": "W026",
+      "category": "Sýry / mozzarella a salátové",
+      "label": "Galbani – mozzarella / salátový sýr",
+      "priority": 1,
+      "brand_aliases": [
+        "Galbani"
+      ],
+      "product_any": [
+        "mozzarel*",
+        "burrat*",
+        "salátový sýr",
+        "feta",
+        "salátový",
+        "salátové"
+      ],
+      "exclude_any": [
+        "mascarpone"
+      ]
+    },
+    {
+      "id": "W027",
+      "category": "Majonézy",
+      "label": "Hellmann’s – majonézy",
+      "priority": 1,
+      "brand_aliases": [
+        "Hellmann",
+        "Hellmanns"
+      ],
+      "product_any": [
+        "majonéz*",
+        "mayo"
+      ],
+      "exclude_any": [
+        "tatarská",
+        "tatarka",
+        "dresink",
+        "omáčka"
+      ]
+    },
+    {
+      "id": "W028",
+      "category": "Másla a tuky",
+      "label": "Madeta máslo",
+      "priority": 1,
+      "brand_aliases": [
+        "Madeta"
+      ],
+      "product_any": [
+        "másl*"
+      ],
+      "exclude_any": [
+        "pomazánkové",
+        "ghí",
+        "ghee",
+        "máslová pomazánka"
+      ]
+    },
+    {
+      "id": "W029",
+      "category": "Másla a tuky",
+      "label": "Hera – tuky na pečení / roztírání",
+      "priority": 1,
+      "brand_aliases": [
+        "Hera"
+      ],
+      "exclude_any": [
+        "smetana",
+        "margarínový sušenka"
+      ],
+      "note": "Rostlinný/ztužený tuk, není klasické máslo."
+    },
+    {
+      "id": "W030",
+      "category": "Másla a tuky",
+      "label": "Omega – tuky na pečení / roztírání",
+      "priority": 1,
+      "brand_aliases": [
+        "Omega"
+      ],
+      "exclude_any": [
+        "smetana",
+        "margarínový sušenka"
+      ],
+      "note": "Rostlinný/ztužený tuk, není klasické máslo."
+    },
+    {
+      "id": "W031",
+      "category": "Másla a tuky",
+      "label": "Rama – tuky na pečení / roztírání",
+      "priority": 1,
+      "brand_aliases": [
+        "Rama"
+      ],
+      "exclude_any": [
+        "smetana",
+        "margarínový sušenka"
+      ],
+      "note": "Rostlinný/ztužený tuk, není klasické máslo."
+    },
+    {
+      "id": "W032",
+      "category": "Másla a tuky",
+      "label": "Flora – tuky na pečení / roztírání",
+      "priority": 1,
+      "brand_aliases": [
+        "Flora"
+      ],
+      "exclude_any": [
+        "smetana",
+        "margarínový sušenka"
+      ],
+      "note": "Rostlinný/ztužený tuk, není klasické máslo."
+    },
+    {
+      "id": "W033",
+      "category": "Nápoje / vody",
+      "label": "Aquila – neperlivá, jemně perlivá, kojenecká",
+      "priority": 1,
+      "brand_aliases": [
+        "Aquila"
+      ],
+      "exclude_any": [
+        "ochucen*",
+        "sirup",
+        "pomeranč",
+        "citron",
+        "jahod",
+        "malin",
+        "grapefruit",
+        "limet",
+        "tonic",
+        "silně perliv*",
+        "perlivá sycená",
+        "sparkling"
+      ],
+      "note": "U neznámé varianty perlivosti ověřit popis; preferovat neperlivou, jemně perlivou a kojeneckou."
+    },
+    {
+      "id": "W034",
+      "category": "Nápoje / vody",
+      "label": "Rajec – neperlivá, jemně perlivá, kojenecká",
+      "priority": 1,
+      "brand_aliases": [
+        "Rajec"
+      ],
+      "exclude_any": [
+        "ochucen*",
+        "sirup",
+        "pomeranč",
+        "citron",
+        "jahod",
+        "malin",
+        "grapefruit",
+        "limet",
+        "tonic",
+        "silně perliv*",
+        "perlivá sycená",
+        "sparkling"
+      ],
+      "note": "U neznámé varianty perlivosti ověřit popis; preferovat neperlivou, jemně perlivou a kojeneckou."
+    },
+    {
+      "id": "W035",
+      "category": "Nápoje / vody",
+      "label": "Dobrá voda – neperlivá, jemně perlivá, kojenecká",
+      "priority": 1,
+      "brand_aliases": [
+        "Dobrá voda"
+      ],
+      "exclude_any": [
+        "ochucen*",
+        "sirup",
+        "pomeranč",
+        "citron",
+        "jahod",
+        "malin",
+        "grapefruit",
+        "limet",
+        "tonic",
+        "silně perliv*",
+        "perlivá sycená",
+        "sparkling"
+      ],
+      "note": "U neznámé varianty perlivosti ověřit popis; preferovat neperlivou, jemně perlivou a kojeneckou."
+    },
+    {
+      "id": "W036",
+      "category": "Nápoje / limonády",
+      "label": "Coca-Cola Original (bez Zero/Light)",
+      "priority": 1,
+      "brand_aliases": [
+        "Coca-Cola",
+        "Coca Cola"
+      ],
+      "exclude_any": [
+        "zero",
+        "light",
+        "bez cukru",
+        "no sugar",
+        "cherry",
+        "vanilla",
+        "lime",
+        "lemon",
+        "caffeine free",
+        "bez kofeinu",
+        "strawberry",
+        "oreo",
+        "citron"
+      ],
+      "note": "Jen klasická Coca-Cola; ostatní příchutě a bezcukerné varianty vyloučeny."
+    },
+    {
+      "id": "W037",
+      "category": "Ovoce",
+      "label": "Avokádo",
+      "priority": 1,
+      "product_any": [
+        "avokád*",
+        "avokad*"
+      ],
+      "exclude_any": [
+        "guacamole",
+        "pomazánk*",
+        "olej"
+      ]
+    },
+    {
+      "id": "W038",
+      "category": "Ovoce",
+      "label": "Banány",
+      "priority": 1,
+      "product_any": [
+        "banán*"
+      ],
+      "exclude_any": [
+        "sušen*",
+        "chips",
+        "pyré",
+        "nektar",
+        "smoothie"
+      ]
+    },
+    {
+      "id": "W039",
+      "category": "Ovoce",
+      "label": "Borůvky",
+      "priority": 1,
+      "product_any": [
+        "borůvk*"
+      ],
+      "exclude_any": [
+        "sušen*",
+        "mražen*",
+        "džem",
+        "jogurt",
+        "sirup",
+        "smoothie"
+      ]
+    },
+    {
+      "id": "W040",
+      "category": "Ovoce",
+      "label": "Maliny",
+      "priority": 1,
+      "product_any": [
+        "malin*"
+      ],
+      "exclude_any": [
+        "sušen*",
+        "mražen*",
+        "džem",
+        "jogurt",
+        "sirup",
+        "smoothie"
+      ]
+    },
+    {
+      "id": "W041",
+      "category": "Ovoce",
+      "label": "Citrony",
+      "priority": 1,
+      "product_any": [
+        "citron*"
+      ],
+      "exclude_any": [
+        "šťáva",
+        "džus",
+        "sirup",
+        "limonád",
+        "olej",
+        "sušen*"
+      ]
+    },
+    {
+      "id": "W042",
+      "category": "Ovoce",
+      "label": "Hroznové víno",
+      "priority": 1,
+      "product_any": [
+        "hroznové víno",
+        "hrozny"
+      ],
+      "exclude_any": [
+        "džus",
+        "mošt",
+        "sušen*",
+        "rozink*"
+      ]
+    },
+    {
+      "id": "W043",
+      "category": "Zelenina",
+      "label": "Okurky",
+      "priority": 1,
+      "product_any": [
+        "okurk*"
+      ],
+      "exclude_any": [
+        "nakládan*",
+        "sterilovan*",
+        "salát okurkový",
+        "kysel*",
+        "zavařen*"
+      ]
+    },
+    {
+      "id": "W044",
+      "category": "Zelenina",
+      "label": "Rajčata",
+      "priority": 1,
+      "product_any": [
+        "rajčat*"
+      ],
+      "exclude_any": [
+        "kečup",
+        "protlak",
+        "omáčk*",
+        "džus",
+        "sušen*",
+        "konzerv*",
+        "polévk*"
+      ]
+    },
+    {
+      "id": "W045",
+      "category": "Zelenina",
+      "label": "Cherry rajčata",
+      "priority": 1,
+      "product_any": [
+        "cherry rajčat*",
+        "koktejlová rajčat*",
+        "mini rajčat*"
+      ],
+      "exclude_any": [
+        "omáčk*",
+        "sušen*"
+      ]
+    },
+    {
+      "id": "W046",
+      "category": "Zelenina",
+      "label": "Mrkev",
+      "priority": 1,
+      "product_any": [
+        "mrkev",
+        "mrkvičk*",
+        "karotk*"
+      ],
+      "exclude_any": [
+        "šťáva",
+        "pyré",
+        "salát s",
+        "konzerv*",
+        "sterilovan*"
+      ]
+    },
+    {
+      "id": "W047",
+      "category": "Zelenina",
+      "label": "Papriky",
+      "priority": 1,
+      "product_any": [
+        "paprik*"
+      ],
+      "exclude_any": [
+        "mletá",
+        "koření",
+        "chips",
+        "salám",
+        "klobása",
+        "sušen*",
+        "náplň",
+        "pomazánk*",
+        "lečo"
+      ]
+    },
+    {
+      "id": "W048",
+      "category": "Sladké",
+      "label": "Studentská pečeť – mléčná/hořká/hořko-mléčná",
+      "priority": 1,
+      "brand_aliases": [
+        "Studentská pečeť"
+      ],
+      "product_any": [
+        "hořk*",
+        "mléčn*",
+        "hořkomléčn*"
+      ],
+      "exclude_any": [
+        "bílá čokoláda",
+        "bílá"
+      ]
+    },
+    {
+      "id": "W049",
+      "category": "Sladké",
+      "label": "Miňonky – kakaové/hořké oplatky",
+      "priority": 1,
+      "brand_aliases": [
+        "Miňonky",
+        "Minonky"
+      ],
+      "product_any": [
+        "kakaov*",
+        "hořk*"
+      ]
+    },
+    {
+      "id": "W050",
+      "category": "Sladké",
+      "label": "Fidorky – kokosové",
+      "priority": 1,
+      "brand_aliases": [
+        "Fidorka",
+        "Fidorky"
+      ],
+      "product_any": [
+        "kokos*"
+      ]
+    },
+    {
+      "id": "W051",
+      "category": "Sladké",
+      "label": "ORION KOKO – kokosová tyčinka",
+      "priority": 1,
+      "product_any": [
+        "koko"
+      ],
+      "exclude_any": [
+        "sušenky",
+        "kokosky",
+        "pečivo",
+        "moučník"
+      ],
+      "brand_aliases": [
+        "Orion"
+      ]
+    },
+    {
+      "id": "W052",
+      "category": "Těstoviny a rýže",
+      "label": "Panzani – těstoviny a rýže",
+      "priority": 1,
+      "brand_aliases": [
+        "Panzani"
+      ],
+      "exclude_any": [
+        "omáčk*",
+        "pesto",
+        "kečup",
+        "dresink",
+        "passata"
+      ]
+    },
+    {
+      "id": "W053",
+      "category": "Papír a hygiena",
+      "label": "Zewa – toaletní papír a papírové ubrousky",
+      "priority": 1,
+      "brand_aliases": [
+        "Zewa"
+      ],
+      "paper_type": "zewa_toilet_or_napkins",
+      "note": "Ponecháno z původního seznamu; nezaměňovat s vlhčenými ubrousky ani výrobky jiné značky."
+    },
+    {
+      "id": "W054",
+      "category": "Papír a hygiena",
+      "label": "Linteo – vlhčené ubrousky",
+      "priority": 1,
+      "brand_aliases": [
+        "Linteo"
+      ],
+      "product_any": [
+        "vlhčen*",
+        "vlhké"
+      ]
+    },
+    {
+      "id": "W055",
+      "category": "Kosmetika",
+      "label": "AXE – sprchové gely, šampony, deodoranty",
+      "priority": 1,
+      "brand_aliases": [
+        "AXE"
+      ],
+      "product_any": [
+        "sprchov*",
+        "šampon*",
+        "deodorant*",
+        "antiperspirant*",
+        "body spray",
+        "spray",
+        "stick"
+      ]
+    },
+    {
+      "id": "W056",
+      "category": "Kosmetika",
+      "label": "Syoss MEN Intense Power – šampon 440 ml",
+      "priority": 1,
+      "brand_aliases": [
+        "Syoss"
+      ],
+      "product_any": [
+        "men intense power",
+        "men power"
+      ],
+      "note": "Pouze Syoss MEN Intense Power šampon; přesné URL mají P1. Červený obal není trvalý identifikátor, výrobce mění grafiku.",
+      "exclude_any": [
+        "intense clean",
+        "clean cool",
+        "keratin",
+        "intense volume",
+        "color"
+      ]
+    },
+    {
+      "id": "W057",
+      "category": "Dentální hygiena",
+      "label": "Signal – zubní pasty",
+      "priority": 1,
+      "brand_aliases": [
+        "Signal"
+      ],
+      "product_any": [
+        "zubní past*",
+        "toothpaste",
+        "pasta"
+      ],
+      "exclude_any": [
+        "kartáček",
+        "ústní voda"
+      ]
+    },
+    {
+      "id": "W058",
+      "category": "Dentální hygiena",
+      "label": "Colgate – zubní pasty",
+      "priority": 1,
+      "brand_aliases": [
+        "Colgate"
+      ],
+      "product_any": [
+        "zubní past*",
+        "toothpaste",
+        "pasta"
+      ],
+      "exclude_any": [
+        "kartáček",
+        "ústní voda"
+      ]
+    },
+    {
+      "id": "W059",
+      "category": "Dentální hygiena",
+      "label": "Parodontax – zubní pasty",
+      "priority": 1,
+      "brand_aliases": [
+        "Parodontax"
+      ],
+      "product_any": [
+        "zubní past*",
+        "toothpaste",
+        "pasta"
+      ],
+      "exclude_any": [
+        "kartáček",
+        "ústní voda"
+      ]
+    },
+    {
+      "id": "W060",
+      "category": "Holení",
+      "label": "Wilkinson – jednorázové žiletky",
+      "priority": 1,
+      "brand_aliases": [
+        "Wilkinson"
+      ],
+      "product_any": [
+        "jednorázov*",
+        "holítk*",
+        "holící strojky",
+        "holici strojky"
+      ],
+      "exclude_any": [
+        "náhradní hlavic*",
+        "náhradní břit*"
+      ]
+    },
+    {
+      "id": "W061",
+      "category": "Praní",
+      "label": "Ariel – prací prostředky",
+      "priority": 1,
+      "brand_aliases": [
+        "Ariel"
+      ],
+      "product_any": [
+        "prací",
+        "gel",
+        "prášek",
+        "kapsle",
+        "tablety",
+        "pods",
+        "tekutý"
+      ],
+      "exclude_any": [
+        "čisticí sprej"
+      ]
+    },
+    {
+      "id": "W062",
+      "category": "Praní",
+      "label": "Persil – prací prostředky",
+      "priority": 1,
+      "brand_aliases": [
+        "Persil"
+      ],
+      "product_any": [
+        "prací",
+        "gel",
+        "prášek",
+        "kapsle",
+        "tablety",
+        "pods",
+        "tekutý"
+      ],
+      "exclude_any": [
+        "čisticí sprej"
+      ]
+    },
+    {
+      "id": "W063",
+      "category": "Praní",
+      "label": "Lenor – aviváže",
+      "priority": 1,
+      "brand_aliases": [
+        "Lenor"
+      ],
+      "product_any": [
+        "aviváž*",
+        "fresh",
+        "soft",
+        "vonné perličk*",
+        "perličk*"
+      ]
+    },
+    {
+      "id": "W064",
+      "category": "Praní",
+      "label": "Silan – aviváže",
+      "priority": 1,
+      "brand_aliases": [
+        "Silan"
+      ],
+      "product_any": [
+        "aviváž*",
+        "fresh",
+        "soft",
+        "vonné perličk*",
+        "perličk*"
+      ]
+    },
+    {
+      "id": "W065",
+      "category": "Praní",
+      "label": "Vanish – odstraňovače skvrn",
+      "priority": 1,
+      "brand_aliases": [
+        "Vanish"
+      ]
+    },
+    {
+      "id": "W066",
+      "category": "Úklid",
+      "label": "Bref – čisticí prostředky",
+      "priority": 1,
+      "brand_aliases": [
+        "Bref"
+      ]
+    },
+    {
+      "id": "W067",
+      "category": "Úklid",
+      "label": "WC Net – čisticí prostředky",
+      "priority": 1,
+      "brand_aliases": [
+        "WC Net"
+      ]
+    },
+    {
+      "id": "W068",
+      "category": "Úklid",
+      "label": "Domestos – čisticí prostředky",
+      "priority": 1,
+      "brand_aliases": [
+        "Domestos"
+      ]
+    },
+    {
+      "id": "W069",
+      "category": "Úklid",
+      "label": "Savo – čisticí prostředky",
+      "priority": 1,
+      "brand_aliases": [
+        "Savo"
+      ]
+    },
+    {
+      "id": "W070",
+      "category": "Úklid",
+      "label": "Cif – čisticí prostředky",
+      "priority": 1,
+      "brand_aliases": [
+        "Cif"
+      ]
+    },
+    {
+      "id": "W071",
+      "category": "Úklid",
+      "label": "Clin – čisticí prostředky",
+      "priority": 1,
+      "brand_aliases": [
+        "Clin"
+      ]
+    },
+    {
+      "id": "W072",
+      "category": "Úklid",
+      "label": "Jar – citron",
+      "priority": 1,
+      "brand_aliases": [
+        "Jar"
+      ],
+      "product_any": [
+        "citron*",
+        "lemon"
+      ]
+    },
+    {
+      "id": "W073",
+      "category": "Kapesníky / balíčky",
+      "label": "Zewa Deluxe Standard – kapesníky v balíčcích",
+      "priority": 1,
+      "brand_aliases": [
+        "Zewa"
+      ],
+      "paper_type": "zewa_deluxe_pocket",
+      "note": "Modré Zewa Deluxe Standard / Original kapesníky v malých balíčcích; Zewa Deluxe Family je naopak 3vrstvý BOX 90 ks."
+    },
+    {
+      "id": "W074",
+      "category": "Papírové utěrky",
+      "label": "Papírové kuchyňské utěrky – všechny značky",
+      "priority": 1,
+      "paper_type": "kitchen_paper_towels",
+      "note": "Jakákoliv značka; pouze jednorázové papírové kuchyňské utěrky/role, nikoli textilní, vlhčené nebo čisticí hadříky."
+    },
+    {
+      "id": "W075",
+      "category": "Kapesníky / krabice",
+      "label": "Papírové kapesníky v krabici 3vrstvé – všechny značky",
+      "priority": 1,
+      "paper_type": "boxed_3ply_tissues",
+      "note": "Jakákoliv značka; papírové kapesníky 3 vrstvy v krabičce nebo boxu. Zewa Deluxe Family (90 ks) je BOX, i když to název Košíku výslovně neuvádí."
+    }
+  ],
+  "favorites": [
+    {
+      "id": "F_ZEWA_DELUXE_STANDARD_10X10",
+      "label": "Zewa Deluxe Standard papírové kapesníky 3vrstvé 10 × 10 ks",
+      "brand": "Zewa",
+      "store": "Rohlík",
+      "url": "https://www.rohlik.cz/1307969-zewa-deluxe-standard-papirove-kapesniky-3vrstve-10x10ks",
+      "priority": 1,
+      "min_discount_pct": 5,
+      "pack": "10 × 10 ks",
+      "note": "Přesná varianta z odkazu; jiné Zewa výrobky P2."
+    },
+    {
+      "id": "F_SYOSS_INTENSE_POWER_440_KOSIK",
+      "label": "Syoss Men Intense Power šampon 440 ml",
+      "brand": "Syoss",
+      "store": "Košík",
+      "url": "https://www.kosik.cz/p304584-syoss-men-intense-power-sampon-pro-muze",
+      "priority": 1,
+      "min_discount_pct": 5,
+      "pack": "440 ml",
+      "note": "Přesný produkt, nemusí mít stále červený obal; design se mění."
+    },
+    {
+      "id": "F_SYOSS_INTENSE_POWER_440_ROHLIK",
+      "label": "Syoss Men Intense Power šampon 440 ml",
+      "brand": "Syoss",
+      "store": "Rohlík",
+      "url": "https://www.rohlik.cz/1299615-syoss-men-intense-power-sampon-pro-muze",
+      "priority": 1,
+      "min_discount_pct": 5,
+      "pack": "440 ml",
+      "note": "Odpovídající produkt pro ověření ceny ve druhém obchodě."
+    },
+    {
+      "id": "F_ZEWA_DELUXE_STANDARD_KOSIK",
+      "label": "Zewa Deluxe Standard – kapesníky 3vrstvé, balíčky",
+      "brand": "Zewa",
+      "store": "Košík",
+      "url": "https://www.kosik.cz/p82407-zewa-deluxe-standard-kapesniky-3-vrstve",
+      "priority": 1,
+      "min_discount_pct": 5,
+      "note": "Deluxe Standard je balíčkové balení; ne krabice."
+    },
+    {
+      "id": "F_ZEWA_DELUXE_FAMILY_KOSIK",
+      "label": "Zewa Deluxe Family – papírové kapesníky 3vrstvé BOX 90 ks",
+      "brand": "Zewa",
+      "store": "Košík",
+      "url": "https://www.kosik.cz/p82477-zewa-deluxe-family-kapesniky-3vrstve",
+      "priority": 1,
+      "min_discount_pct": 5,
+      "note": "Zewa Deluxe Family je krabičkové balení 90 ks, nikoli kapesní balíčky.",
+      "pack": "90 ks v krabici"
+    },
+    {
+      "id": "F_ZEWA_WISCH_WEG_KOSIK",
+      "label": "Zewa Wisch & Weg Original – kuchyňské utěrky 4 role",
+      "brand": "Zewa",
+      "store": "Košík",
+      "url": "https://www.kosik.cz/p233874-zewa-wisch-weg-original-kuchynske-uterky-4-role",
+      "priority": 1,
+      "min_discount_pct": 5,
+      "note": "Papírové kuchyňské utěrky; sleduj i jiné značky."
+    },
+    {
+      "id": "F_ORION_KOKO_KOSIK",
+      "label": "ORION KOKO kokosová tyčinka",
+      "store": "Košík",
+      "url": "https://www.kosik.cz/p770680-orion-koko-kokosova-tycinka-macena-v-mlecne-poleve",
+      "priority": 1,
+      "min_discount_pct": 5
+    },
+    {
+      "id": "F_STUDENTSKA_PECET_KOSIK",
+      "label": "ORION Studentská pečeť mléčná",
+      "store": "Košík",
+      "url": "https://www.kosik.cz/p698853-orion-studentska-pecet-mlecna-cokolada-s-arasidy-rozinkami-a-zele",
+      "priority": 1,
+      "min_discount_pct": 5
+    },
+    {
+      "id": "F_FIDORKA_KOKOS_KOSIK",
+      "label": "Opavia Fidorka kokosová",
+      "store": "Košík",
+      "url": "https://www.kosik.cz/p21877-opavia-fidorka-mlecna-s-kokosem-modra",
+      "priority": 1,
+      "min_discount_pct": 5
+    },
+    {
+      "id": "F_MINONKY_KAKAO_KOSIK",
+      "label": "Opavia Miňonky kakaové",
+      "store": "Košík",
+      "url": "https://www.kosik.cz/p21907-opavia-minonky-kakaove-oplatky",
+      "priority": 1,
+      "min_discount_pct": 5
+    }
+  ],
+  "brands": [
+    {
+      "name": "LE & CO",
+      "aliases": [
+        "LE & CO",
+        "LE&CO",
+        "Le Co"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Chodura",
+      "aliases": [
+        "Chodura",
+        "Chodur"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Wein",
+      "aliases": [
+        "Wein"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Kostelecké",
+      "aliases": [
+        "Kostelecké",
+        "Kostelecké uzeniny"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Kmotr",
+      "aliases": [
+        "Kmotr"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Ponnath",
+      "aliases": [
+        "Ponnath"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Krahulík",
+      "aliases": [
+        "Krahulík",
+        "Krahulik"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "MADETA",
+      "aliases": [
+        "MADETA"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Leerdammer",
+      "aliases": [
+        "Leerdammer"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Président",
+      "aliases": [
+        "Président",
+        "President"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Želetava",
+      "aliases": [
+        "Želetava",
+        "Smetanito"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Veselá kráva",
+      "aliases": [
+        "Veselá kráva",
+        "Vesela Krava"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Madeta",
+      "aliases": [
+        "Madeta",
+        "Lipno"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Král Sýrů",
+      "aliases": [
+        "Král Sýrů",
+        "Král Sýru",
+        "Král sýrů"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Sedlčanský",
+      "aliases": [
+        "Sedlčanský",
+        "Sedlčanské"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Galbani",
+      "aliases": [
+        "Galbani"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Hellmann",
+      "aliases": [
+        "Hellmann",
+        "Hellmanns"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Hera",
+      "aliases": [
+        "Hera"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Omega",
+      "aliases": [
+        "Omega"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Rama",
+      "aliases": [
+        "Rama"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Flora",
+      "aliases": [
+        "Flora"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Aquila",
+      "aliases": [
+        "Aquila"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Rajec",
+      "aliases": [
+        "Rajec"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Dobrá voda",
+      "aliases": [
+        "Dobrá voda"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Coca-Cola",
+      "aliases": [
+        "Coca-Cola",
+        "Coca Cola"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Studentská pečeť",
+      "aliases": [
+        "Studentská pečeť"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Miňonky",
+      "aliases": [
+        "Miňonky",
+        "Minonky"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Fidorka",
+      "aliases": [
+        "Fidorka",
+        "Fidorky"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Panzani",
+      "aliases": [
+        "Panzani"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Zewa",
+      "aliases": [
+        "Zewa"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Linteo",
+      "aliases": [
+        "Linteo"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "AXE",
+      "aliases": [
+        "AXE"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Syoss",
+      "aliases": [
+        "Syoss"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Signal",
+      "aliases": [
+        "Signal"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Colgate",
+      "aliases": [
+        "Colgate"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Parodontax",
+      "aliases": [
+        "Parodontax"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Wilkinson",
+      "aliases": [
+        "Wilkinson"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Ariel",
+      "aliases": [
+        "Ariel"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Persil",
+      "aliases": [
+        "Persil"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Lenor",
+      "aliases": [
+        "Lenor"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Silan",
+      "aliases": [
+        "Silan"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Vanish",
+      "aliases": [
+        "Vanish"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Bref",
+      "aliases": [
+        "Bref"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "WC Net",
+      "aliases": [
+        "WC Net"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Domestos",
+      "aliases": [
+        "Domestos"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Savo",
+      "aliases": [
+        "Savo"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Cif",
+      "aliases": [
+        "Cif"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Clin",
+      "aliases": [
+        "Clin"
+      ],
+      "min_discount_pct": 15
+    },
+    {
+      "name": "Jar",
+      "aliases": [
+        "Jar"
+      ],
+      "min_discount_pct": 15
+    }
+  ],
+  "sources": {
+    "Rohlík": "https://www.rohlik.cz/cenove-trhaky",
+    "Košík": "https://www.kosik.cz/s1-akce"
+  },
+  "canonical_pairs": [
+    {
+      "id": "syoss-men-intense-power-440ml",
+      "rohlik_url": "https://www.rohlik.cz/1299615-syoss-men-intense-power-sampon-pro-muze",
+      "kosik_url": "https://www.kosik.cz/p304584-syoss-men-intense-power-sampon-pro-muze",
+      "size": "440 ml",
+      "note": "Porovnávat jen při ověření ceny obou obchodů a stejných podmínek nákupu; výrobce upozorňuje na měnící se design obalu."
+    }
+  ],
+  "data_scope": "public_sale_pages_only",
+  "limitations": [
+    "Kontrolované jsou pouze veřejné akční karty, ne celý katalog.",
+    "Doručovací PSČ 149 00 je zadáno, ale veřejné ceny/dostupnost nejsou automaticky potvrzeny pro toto PSČ; bez přihlášení.",
+    "Nesrovnávat nesouměřitelná balení a podmínky.",
+    "Zewa Deluxe Standard 3 vrstvy 10×10 ks a Syoss MEN Intense Power šampon 440 ml mají ověřené produktové URL, ale ne garantovanou dnešní cenu ani slevu."
+  ],
+  "delivery": {
+    "postal_code": "149 00",
+    "country": "CZ",
+    "postcode_specific_prices_verified": false,
+    "note": "PSČ je preferovaná doručovací oblast. Automatický sběrač dosud neumí na Rohlíku a Košíku spolehlivě nastavit adresu; veřejné ceny nejsou ověřeny pro toto PSČ."
+  },
+  "max_scroll_rounds": 85,
+  "catalog_search": {
+    "enabled": true,
+    "strategy": "Visible public shop search for every watch rule, all product categories, sale and regular prices.",
+    "max_queries_per_run": 8,
+    "scrolls_per_query": 8,
+    "max_cards_per_query": 260,
+    "cache_retention_hours": 240,
+    "price_max_age_hours": 18,
+    "schedule_note": "3 runs/day × at most 8 public searches = at most 24 queries/day, with approximately ten-day rolling coverage. Never promise full current-catalogue coverage. Stop on retailer rate limits; stale prices must not appear as current.",
+    "fallback_to_sales_page": true,
+    "coverage_window_hours": 240
+  },
+  "detail_max_per_run": 12
+}

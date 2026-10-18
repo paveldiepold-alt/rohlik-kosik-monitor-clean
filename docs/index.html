@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rohlík × Košík | Hlídač cen</title>
+<style>
+:root{font-family:Inter,"Segoe UI",Arial,sans-serif;color:#172336;background:#f2f4f7}
+*{box-sizing:border-box}body{margin:0}header{background:#172336;color:#fff;padding:27px max(24px,calc((100vw - 1660px)/2))}
+h1{font-size:29px;margin:0 0 6px}header p{color:#cbd5e1;margin:0}main{max-width:1660px;margin:25px auto;padding:0 18px}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.stat,.panel{background:white;box-shadow:0 2px 10px #15223b0a;border-radius:13px;padding:18px}
+.stat .num{font-size:29px;font-weight:800;color:#213a57}.stat .cap{font-size:13px;color:#5b6574;margin-top:4px}
+.toolbar{display:flex;gap:11px;flex-wrap:wrap;align-items:end;margin:16px 0}.control{display:flex;flex-direction:column;gap:5px;color:#5b6574;font-size:12px;font-weight:700}
+select,input{border:1px solid #d6dce6;padding:11px 10px;background:white;border-radius:8px;color:#1d2939;font-size:14px}
+/* Preserve price / discount / comparison text on one line; scroll only if needed. */
+.gridwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;min-width:1210px;width:100%;font-size:13.5px;table-layout:auto}
+th{color:#596678;text-align:left;font-size:12px;background:#f6f8fa;white-space:nowrap}
+th,td{padding:12px 8px;border-bottom:1px solid #e8ebef;vertical-align:middle}
+/* Keep the values in the highlighted screenshot columns unbroken. */
+th:nth-child(6),td:nth-child(6){white-space:nowrap;min-width:98px;font-variant-numeric:tabular-nums}
+th:nth-child(7),td:nth-child(7){white-space:nowrap;min-width:65px;font-variant-numeric:tabular-nums}
+th:nth-child(9),td:nth-child(9){white-space:nowrap;min-width:155px}
+th:nth-child(10),td:nth-child(10){white-space:nowrap;min-width:75px}
+/* Category and brand stay compact; long product descriptions wrap rather than hiding prices. */
+th:nth-child(1),td:nth-child(1){min-width:100px}
+th:nth-child(2),td:nth-child(2){min-width:128px;white-space:nowrap}
+th:nth-child(3),td:nth-child(3){min-width:135px;white-space:nowrap}
+th:nth-child(4),td:nth-child(4){min-width:310px}
+th:nth-child(5),td:nth-child(5){min-width:65px}
+th:nth-child(8),td:nth-child(8){min-width:67px}
+
+/* Compact product thumbnail + variant: same row as product, photo from the
+   corresponding retailer. If unavailable, render a neutral placeholder. */
+.product-identity{display:flex;align-items:center;gap:11px;min-width:280px}
+.product-photo{width:52px;height:58px;flex:0 0 52px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#f6f8fa;border:1px solid #e5e9ef;overflow:hidden;text-decoration:none}
+.product-photo img{width:100%;height:100%;object-fit:contain;background:#fff}
+.product-photo .no-photo{font-size:11px;font-weight:700;color:#9aa8b7;text-align:center;padding:3px}
+.product-text{display:flex;flex-direction:column;gap:5px;min-width:0}
+.product-name{font-weight:600;line-height:1.3}
+.pack-chip{display:inline-block;align-self:flex-start;font-size:12px;font-weight:700;color:#155e75;background:#e7f6fb;border-radius:6px;padding:3px 7px;white-space:nowrap}
+.unit-info{display:inline-block;font-size:11px;color:#64748b;white-space:nowrap}
+@media(max-width:800px){.product-photo{width:46px;height:52px;flex-basis:46px}.product-identity{min-width:250px}}
+
+td a{color:#1362b3;font-weight:700;text-decoration:none}td a:hover{text-decoration:underline}
+tr:hover{background:#fafbfd}.tag{display:inline-block;background:#eaf7ee;color:#177644;padding:4px 8px;border-radius:20px;font-size:11px;font-weight:700}
+.fav{background:#fff3d6;color:#865806}.conditional{background:#fff5e7;color:#935a08}.bad{color:#ae242b;font-weight:700}.good{color:#167448;font-weight:700}
+.notice{background:#fff9e9;color:#79571d;border:1px solid #f3db9d;padding:10px;border-radius:8px;margin:8px 0}.note{font-size:12px;color:#6b7280;line-height:1.5}.error{background:#fff0f0;color:#a52c31;border:1px solid #ffcbcc;padding:10px;border-radius:8px;margin:8px 0}
+.footer{padding:18px 2px;color:#657387;font-size:12px}a{color:#1362b3}.scrolltip{font-size:12px;color:#637084;margin:6px 0 10px}.warn{padding:10px 12px;background:#fff9e9;border:1px solid #ffdaa6;border-radius:9px;color:#76520c;margin:12px 0}
+@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}header{padding:20px}main{margin-top:15px}}
+
+/* v13: separate mobile experience; desktop data table intentionally retained. */
+.mobile-only {display:none}
+button{font:inherit;cursor:pointer}
+.mobile-filters-toggle,.quick-btn {border:1px solid #d7e1ef;background:#fff;color:#1f3553;border-radius:10px;font-weight:750}
+.mobile-filters-toggle{padding:10px 14px;min-height:46px}
+.mobile-quick{display:none}
+.mobile-list{display:none}
+.card-empty{padding:20px;color:#627387;text-align:center}
+.mobile-controlbar{display:none}
+@media(max-width:768px){
+  :root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+  header{padding:18px 15px 16px}h1{font-size:23px;line-height:1.2}header p{font-size:12px;line-height:1.4}
+  main{margin:10px auto;padding:0 10px}
+  .warn{font-size:11px;line-height:1.5;padding:9px 11px;margin:8px 0 10px}
+  .stat,.panel{border-radius:13px;padding:12px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .stat .num{font-size:25px}.stat .cap{font-size:11px;line-height:1.35}
+  .panel{margin-top:10px!important;padding:12px 10px}
+  .toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:10px;margin:12px 0 8px}
+  .toolbar .control{min-width:0;font-size:12px}
+  .toolbar .mode-control{order:0;grid-column:1/-1}
+  .toolbar .date-control{order:1;grid-column:1}
+  .toolbar .search-control{order:3;grid-column:1/-1}
+  .toolbar .advanced-control{display:none;grid-column:1/-1;order:5}
+  .toolbar.filters-open .advanced-control{display:flex}
+  .mobile-filters-toggle{display:flex;align-items:center;justify-content:center;gap:6px;order:2;grid-column:2}
+  .toolbar select,.toolbar input{width:100%;min-height:44px;font-size:16px}
+  .toolbar .search-control input{font-size:16px}
+  .mobile-quick{display:flex;gap:7px;overflow-x:auto;padding:2px 0 9px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .quick-btn{flex:0 0 auto;font-size:12px;padding:8px 11px;min-height:37px;white-space:nowrap}
+  .quick-btn.active{background:#193b61;color:#fff;border-color:#193b61}
+  .mobile-controlbar{display:flex;justify-content:space-between;gap:9px;align-items:center;margin:0 0 10px}
+  .mobile-controlbar .count{font-size:12px;color:#52687c}
+  .mobile-controlbar select{font-size:12px;padding:7px 8px;min-height:35px;border-radius:9px;max-width:190px}
+  .gridwrap,.scrolltip{display:none!important}
+  .mobile-list{display:grid;gap:10px}
+  .item-card{border:1px solid #e3e9f1;border-radius:13px;padding:12px;background:#fff;box-shadow:0 2px 8px #0f27400a;min-width:0}
+  .item-header{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:10px}
+  .item-head-left{display:flex;gap:6px;align-items:center;min-width:0;flex-wrap:wrap}
+  .item-header .tag{font-size:10px;padding:4px 8px}
+  .item-category{font-size:11px;color:#64748b;line-height:1.3}
+  .shop-tag{font-size:11px;font-weight:700;color:#2c4260;border-radius:7px;background:#eff4f9;padding:5px 7px;white-space:nowrap}
+  .item-main{display:grid;grid-template-columns:74px minmax(0,1fr);column-gap:10px;align-items:start}
+  .item-main .product-photo{height:82px;width:74px;min-width:0;flex-basis:74px;border-radius:10px}
+  .item-main .no-photo{font-size:12px;font-weight:750;color:#8293a6;letter-spacing:.03em}
+  .item-title{font-size:14px;line-height:1.3;color:#172336;text-decoration:none;font-weight:750;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;word-break:normal;overflow-wrap:anywhere}
+  .item-meta{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:5px 0}
+  .item-meta .pack-chip{font-size:11px;padding:3px 6px}
+  .item-meta .unit-info{font-size:10.5px}
+  .price-line{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px}
+  .item-price{font-size:22px;line-height:1.15;letter-spacing:-.03em;font-weight:850;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .discount-chip{font-size:12px;background:#e8f6ec;color:#197146;padding:5px 7px;border-radius:8px;font-weight:800;white-space:nowrap}
+  .item-terms{font-size:11px;color:#85601a;background:#fff7e8;border-radius:6px;padding:4px 7px;display:inline-block;margin-top:8px}
+  .item-compare{font-size:11px;color:#637185;padding:9px 0 10px;line-height:1.4}
+  .item-action{display:block;background:#1f4f81;color:#fff!important;border-radius:9px;text-align:center;padding:11px;text-decoration:none;font-size:13px;font-weight:750;min-height:43px}
+  .footer{font-size:11px;line-height:1.5;padding:16px 4px}
+  #checked{font-size:11px;line-height:1.5;margin-top:4px}
+  .note{font-size:11px;line-height:1.45}
+}
+@media(min-width:769px){.mobile-filters-toggle{display:none}}
+</style>
+</head>
+<body>
+<header><h1>🛒 Rohlík × Košík</h1><p>Hlídač slev – značky, oblíbené produkty a ověřené cenové srovnání</p></header>
+<main>
+<div class="warn">NEÚPLNÝ vzorek: rozšířený sběr prochází vyhledávání výrobků ze VŠECH sledovaných kategorií a značek v obou obchodech. Úplnost výsledků je nutné ověřovat podle pokrytí dotazů. Přesné ceny a dostupnost pro PSČ 149 00 nejsou ověřeny. Neúspěšný sběr ≠ žádné slevy.</div>
+<div id="alerts"></div><div id="coverage" class="note" style="margin:10px 3px 14px;padding:9px 12px;background:#e9f4fb;border-radius:8px" aria-live="polite">Kontrola pokrytí katalogu: načítám…</div>
+<div class="stats">
+<div class="stat"><div id="catalogCount" class="num">–</div><div id="catalogCountCaption" class="cap">Nalezených výrobků (včetně nezlevněných)</div></div>
+<div class="stat"><div id="n" class="num">–</div><div class="cap">Ověřené slevy v dostupném vzorku</div></div>
+<div class="stat"><div id="fav" class="num">–</div><div class="cap">Z toho odpovídá sledovacím pravidlům</div></div>
+<div class="stat"><div id="pairs" class="num">–</div><div class="cap">Ověřených srovnání dvojic</div></div>
+<div class="stat"><div id="changes" class="num">–</div><div class="cap">Nově nalezených / zlevněných od poslední známé ceny</div></div>
+</div>
+<section class="panel" style="margin-top:16px">
+<strong style="font-size:17px">Denní přehled</strong><div class="note" id="checked"></div>
+<div class="toolbar">
+<label class="control mode-control">Zobrazení<select id="viewmode"><option value="sale">Jen zlevněné</option><option value="catalog">Všechny nalezené výrobky</option><option value="historical">Dříve nalezené (neověřené)</option></select></label>
+<label class="control date-control">Datum<select id="date"><option value="latest">Poslední</option></select></label>
+<button type="button" id="filter-toggle" class="mobile-filters-toggle" aria-expanded="false" aria-controls="brand">☷ Filtry</button>
+<label class="control advanced-control">Značka / výrobek<select id="brand"><option value="">Všechny značky</option></select></label>
+<label class="control advanced-control">Kategorie<select id="category"><option value="">Všechny kategorie</option></select></label>
+<label class="control advanced-control">Obchod<select id="shop"><option value="">Oba obchody</option><option>Rohlík</option><option>Košík</option></select></label>
+<label class="control advanced-control">Priorita<select id="priority"><option value="">Vše</option><option value="yes">Pouze oblíbené</option></select></label>
+<label class="control advanced-control">Minimální sleva<select id="min"><option value="0">Vše</option><option value="10">10 %</option><option value="20">20 %</option><option value="30">30 %</option><option value="40">40 %</option></select></label>
+<label class="control search-control">Hledat<input id="search" placeholder="Název produktu..."></label>
+</div>
+<div class="mobile-quick" aria-label="Rychlé filtrování">
+<button class="quick-btn active" type="button" data-quick="all">Vše</button>
+<button class="quick-btn" type="button" data-quick="favorites">★ Oblíbené</button>
+<button class="quick-btn" type="button" data-quick="Rohlík">Rohlík</button>
+<button class="quick-btn" type="button" data-quick="Košík">Košík</button>
+</div>
+<div class="mobile-controlbar"><span class="count" id="mobile-count" aria-live="polite">Načítám nabídky…</span>
+<label class="control">Řadit<select id="mobile-sort"><option value="discount">Největší sleva</option><option value="price">Nejnižší cena</option><option value="name">Název A–Z</option></select></label></div>
+<p class="scrolltip">Na iPhonu použij produktové karty pod sebou.</p><div class="gridwrap"><table><thead><tr><th>Priorita</th><th>Kategorie</th><th>Značka / typ</th><th>Produkt</th><th>Obchod</th><th>Cena</th><th>Sleva</th><th>Podmínka</th><th>Druhý obchod*</th><th>Přejít</th></tr></thead><tbody id="body"></tbody></table></div>
+<div id="mobile-list" class="mobile-list" aria-live="polite"></div>
+<p class="note">*Porovnáváme pouze shodné a jednoznačně identifikované nabídky, pokud je náš sběr nalezl u obou obchodů. Množstevní ceny se nesměšují s běžnými. Prázdné srovnání <b>neznamená</b>, že produkt v druhém obchodě není. Historie začíná prvním skutečným sběrem.</p>
+</section>
+<div class="footer"><b>Zdroj:</b> veřejné vyhledávání napříč sortimentem a původní akční stránky <a href="https://www.rohlik.cz/cenove-trhaky" target="_blank" rel="noopener noreferrer">Rohlík</a> a <a href="https://www.kosik.cz/s1-akce" target="_blank" rel="noopener noreferrer">Košík</a>. Neoficiální nástroj. Preferované PSČ 149 00; veřejně zobrazené ceny a dostupnost nemusí platit pro toto PSČ, dokud není oblast výslovně ověřena. <a href="report.html">Strojově čitelný denní report pro ChatGPT</a> · <a href="data/search_status.json" target="_blank" rel="noopener noreferrer">Diagnostika vyhledávání</a>.</div>
+</main>
+<script>
+"use strict";
+let data=null;
+const $=x=>document.getElementById(x);
+const isPreferred=o=>Boolean(o.favorite || /^W\d{3}$/.test(o.rule_id||''));
+const money=x=>typeof x==='number'?x.toLocaleString('cs-CZ',{minimumFractionDigits:2,maximumFractionDigits:2})+' Kč':'—';
+function node(tag,text,cls){const n=document.createElement(tag);n.textContent=text??'';if(cls)n.className=cls;return n}
+function displayProductName(name){return String(name||'').replace(/^(?:(?:Zobrazit|Otevřít|Prohlédnout)\s+detail\s+produktu|(?:Zobrazit|Otevřít)\s+produkt)\s*[:\-–]?\s*/i,'').trim()}
+function compactProductName(name){return displayProductName(name).replace(/[,，]\s*[-−]\s*\d{1,2}\s*%.*$/,'').trim()}
+function showError(msg){const n=node('div',msg,'error');$('alerts').appendChild(n)}
+function showNotice(msg){const n=node('div',msg,'notice');$('alerts').appendChild(n)}
+// Known exact variant, sourced from user-supplied screenshot of the Košík
+// 625 ml product. Never re-use it for 210 ml or 405 ml.
+const HELLMANNS_625='data:image/webp;base64,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';
+function isHellmann625(o){
+ const product=displayProductName(o.name).toLocaleLowerCase('cs-CZ');
+ return o.shop==='Košík' && /^https:\/\/(?:www\.)?kosik\.cz\/p459210(?:-|\/|$)/i.test(o.url||'')
+   && /hellmann/.test(product) && /majon/.test(product) && /^625\s*ml$/i.test(o.quantity||'');
+}
+function photoSource(o){
+ if(typeof o.image_url==='string' && (/^https:\/\//i.test(o.image_url)||/^data\/images\/[a-f0-9]{22}\.webp$/i.test(o.image_url))) return o.image_url;
+ if(isHellmann625(o)) return HELLMANNS_625;
+ return '';
+}
+function productPhoto(o,extraClass=''){
+ const a=document.createElement('a');a.href=o.url||'#';a.target='_blank';a.rel='noopener noreferrer';
+ a.className='product-photo '+extraClass;a.title=displayProductName(o.name);
+ const source=photoSource(o);
+ function fallback(){a.replaceChildren(node('span','Bez fotky','no-photo'))}
+ if(source){
+  const img=document.createElement('img');img.src=source;img.alt='Fotografie: '+compactProductName(o.name);img.decoding='async';img.loading='lazy';img.referrerPolicy='no-referrer';img.onerror=()=>{if(source!==HELLMANNS_625 && isHellmann625(o)){img.onerror=fallback;img.src=HELLMANNS_625;}else fallback()};a.appendChild(img)
+ }else fallback();
+ return a;
+}
+// Pair counting is based on the whole catalogue, never just on discounted products.
+function countVerifiedPairs(catalog){
+ const rows=(catalog||[]).filter(o=>o.price_verified===true &&
+   Number.isFinite(o.price) && o.price>0 && o.url);
+ const byUrl=new Map(rows.map(o=>[o.url,o]));
+ const pairs=new Set();
+ for(const item of rows){
+  const peer=byUrl.get(item.other_shop_url);
+  if(!peer || peer.shop===item.shop || peer.other_shop_url!==item.url)continue;
+  if(!Number.isFinite(item.other_shop_price)||!Number.isFinite(peer.other_shop_price))continue;
+  if(Math.abs(item.other_shop_price-peer.price)>0.02 || Math.abs(peer.other_shop_price-item.price)>0.02)continue;
+  pairs.add([item.url,peer.url].sort().join('|'));
+ }
+ return pairs.size;
+}
+// Offers are presentation rows and historically do not carry price_verified flags.
+// Join each offer to the canonical catalogue row; never mistake absent flags
+// on an Offer dataclass for an unverified sale, nor trust an orphan offer.
+function confirmedOffers(snapshot){
+ const catalog=new Map((snapshot?.catalog||[]).filter(o=>o.url).map(o=>[o.url,o]));
+ return (snapshot?.offers||[]).filter(o=>{
+  const rec=catalog.get(o.url);
+  return !!rec && rec.price_verified===true && rec.discount_verified===true &&
+   Number.isFinite(rec.price) && rec.price>0 && Number.isFinite(o.price) && o.price>0 &&
+   Math.abs(o.price-rec.price)<0.02 && Number.isFinite(o.discount_pct) && o.discount_pct>0;
+ });
+}
+function refresh(){
+ if(!data)return;
+ const offers=confirmedOffers(data);
+ const catalog=data.catalog||[];
+ const pricedCount=catalog.filter(o=>o.price_verified===true && Number.isFinite(o.price) && o.price>0).length;
+ $('catalogCount').textContent=catalog.length;
+ $('catalogCountCaption').textContent=`Nalezené záznamy (${pricedCount} s cenou, ${catalog.length-pricedCount} bez ověřené ceny)`;
+ $('n').textContent=offers.length;$('fav').textContent=offers.filter(isPreferred).length;
+ $('pairs').textContent=countVerifiedPairs(catalog);
+ $('changes').textContent=(data.changes||[]).length;
+ const photos=offers.filter(o=>/^data\/images\/[a-f0-9]{22}\.webp$/i.test(o.image_url||'')||isHellmann625(o)).length;
+ const cov=data.catalog_coverage;
+ $('coverage').textContent=cov?`Vyhledávání s výsledky za 24 h: ${cov.queries_responded_24h}/${cov.queries_planned} dotazů. V období ${Math.round((cov.coverage_window_hours||24)/24)} dní: ${cov.queries_responded_window??cov.queries_responded_24h}/${cov.queries_planned} dotazů a ${cov.watch_rules_with_search_window??cov.watch_rules_with_search_24h}/${cov.watch_rules_total} pravidel. Potíže za 24 h: ${cov.failed_queries_24h||0}. Nalezeno ${data.catalog?.length||0} výrobků (jen část katalogu). Žádný výsledek ≠ produkt neexistuje; stará cena ≠ aktuální cena.`:'Pokrytí katalogu pro tento report není dostupné (starší verze sběru).';
+ $('checked').textContent=`Datum: ${data.date||'—'} · Kontrola: ${data.checked_at||'—'} · PSČ: ${data.delivery?.postal_code||'149 00'} · Veřejné ceny · Fotografie: ${photos}/${offers.length} (včetně 625 ml z předlohy)`;
+ $('alerts').replaceChildren();
+ if(data.demo)showError('DEMO DATA – uvedené ceny nejsou skutečné.');
+ for(const [shop,info] of Object.entries(data.sources||{})){
+   if(data.demo)continue;
+   if(info.status==='fallback_action_page')showNotice(`${shop}: běžné vyhledávání neúspěšné; použity pouze veřejné akční nabídky. Výsledky jsou neúplné.`);
+   else if(info.status!=='ok')showNotice(`${shop}: neúplný sběr (${info.status}). Nepotvrzené výsledky neznamenají, že v obchodě nejsou slevy.`);
+ }
+ const latestFallback=data.catalog_coverage?.sale_page_fallback||{};
+ for(const [shop,stat] of Object.entries(latestFallback)){
+   if(stat.status==='ok')showNotice(`${shop}: záložní kontrola akcí dokončena; ${stat.matched_offers??0} vyhovujících akcí. Vyhledávání celého katalogu zůstává neúplné.`);
+ }
+ const unconfirmed=data.recent_unconfirmed||[];
+ if(unconfirmed.length)showNotice(`${unconfirmed.length} dříve zachycených akcí nebylo při nynější kontrole znovu potvrzeno. Nezapočítávají se mezi aktuální slevy.`);
+ const allProducts=[...offers,...(data.catalog||[]),...(data.recent_unconfirmed||[])];
+ const brands=[...new Set(allProducts.map(o=>o.brand||'Ostatní'))].sort((a,b)=>a.localeCompare(b,'cs'));const keepBrand=$('brand').value;
+ $('brand').replaceChildren(node('option','Všechny značky'));$('brand').firstElementChild.value='';
+ for(const brand of brands){const opt=node('option',brand);opt.value=brand;$('brand').appendChild(opt)}
+ $('brand').value=brands.includes(keepBrand)?keepBrand:'';
+ const cats=[...new Set(allProducts.map(o=>o.category||'Ostatní'))].sort((a,b)=>a.localeCompare(b,'cs'));const keepCat=$('category').value;
+ $('category').replaceChildren(node('option','Všechny kategorie'));$('category').firstElementChild.value='';
+ for(const cat of cats){const opt=node('option',cat);opt.value=cat;$('category').appendChild(opt)}
+ $('category').value=cats.includes(keepCat)?keepCat:'';
+ applyFilters();
+}
+function filteredOffers(){
+ const b=$('brand').value,c=$('category').value,s=$('shop').value,p=$('priority').value,m=Number($('min').value)||0,q=$('search').value.toLocaleLowerCase('cs');
+ const source=$('viewmode').value==='catalog'?(data?.catalog||[]):($('viewmode').value==='historical'?(data?.recent_unconfirmed||[]):confirmedOffers(data));
+ return source.filter(o=>(!b||o.brand===b)&&(!c||(o.category||'Ostatní')===c)&&(!s||o.shop===s)&&(!p||isPreferred(o))&&Number(o.discount_pct||0)>=m&&displayProductName(o.name).toLocaleLowerCase('cs').includes(q));
+}
+function comparison(o){return o.other_shop_price!=null?`${o.other_shop}: ${money(o.other_shop_price)} (${o.other_shop_price>o.price?'+':''}${(o.other_shop_price-o.price).toFixed(2)} Kč)`:'Bez ověřeného páru'}
+function desktopCell(txt,cls){let td=document.createElement('td');td.appendChild(node('span',txt,cls));return td}
+function productCell(o){const td=document.createElement('td'),wrap=node('div','','product-identity'),details=node('div','','product-text');
+ details.appendChild(node('span',displayProductName(o.name),'product-name'));
+ if(o.stale)details.appendChild(node('span','POSLEDNÍ ZNÁMÁ NABÍDKA – NEOVĚŘENO','unit-info'));
+ if(o.quantity){details.appendChild(node('span','Balení: '+o.quantity,'pack-chip'));if(o.unit_price!=null&&o.unit_label)details.appendChild(node('span',money(o.unit_price)+'/'+o.unit_label.replace(/^Kč\//,''),'unit-info'));}
+ else details.appendChild(node('span','Balení nezjištěno','unit-info'));
+ wrap.append(productPhoto(o),details);td.appendChild(wrap);return td;
+}
+function renderDesktop(visible){
+ const tbody=$('body');tbody.replaceChildren();
+ for(const o of visible){const tr=document.createElement('tr');const fav=isPreferred(o);
+ tr.appendChild(desktopCell(fav?'★ Oblíbené':'Značka',fav?'tag fav':'tag'));
+ tr.appendChild(desktopCell(o.category||'Ostatní'));
+ tr.appendChild(desktopCell(o.brand||'—'));
+ tr.appendChild(productCell(o));
+ tr.appendChild(desktopCell(o.shop||'—'));
+ tr.appendChild(desktopCell(money(o.price)));
+ tr.appendChild(desktopCell(o.discount_pct>0?'−'+o.discount_pct+' %':'—',o.discount_pct>0?'good':''));
+ tr.appendChild(desktopCell(o.terms||'—',(o.terms||'').startsWith('množstevní')?'tag conditional':''));
+ tr.appendChild(desktopCell(comparison(o)));
+ const td=document.createElement('td');const a=node('a','Otevřít ↗');a.href=o.url||'#';a.target='_blank';a.rel='noopener noreferrer';td.appendChild(a);tr.appendChild(td);tbody.appendChild(tr);
+ }
+ if(!visible.length){const tr=document.createElement('tr');const td=node('td','Žádné ověřené výsledky pro zadané filtry.');td.colSpan=10;tr.appendChild(td);tbody.appendChild(tr)}
+}
+function makeCard(o){
+ const card=node('article','','item-card');
+ const head=node('div','','item-header'),left=node('div','','item-head-left');
+ left.appendChild(node('span',isPreferred(o)?'★ Oblíbené':'Značka',isPreferred(o)?'tag fav':'tag'));
+ left.appendChild(node('span',o.category||'Ostatní','item-category'));
+ head.append(left,node('span',o.shop||'—','shop-tag'));
+ const main=node('div','','item-main');
+ const content=node('div','','item-detail');
+ const title=node('a',compactProductName(o.name),'item-title');title.href=o.url||'#';title.target='_blank';title.rel='noopener noreferrer';
+ const meta=node('div','','item-meta');
+ if(o.stale)meta.appendChild(node('span','NEOVĚŘENO · '+(o.checked_at||'bez data'),'unit-info'));
+ if(o.quantity)meta.appendChild(node('span',o.quantity,'pack-chip'));
+ if(o.unit_price!=null && o.unit_label)meta.appendChild(node('span',money(o.unit_price)+'/'+o.unit_label.replace(/^Kč\//,''),'unit-info'));
+ const price=node('div','','price-line');price.append(node('span',money(o.price),'item-price'));if(o.discount_pct>0)price.appendChild(node('span','−'+o.discount_pct+' %','discount-chip'));
+ content.append(title,meta,price);
+ if($('viewmode').value==='catalog' && o.checked_at)content.appendChild(node('span','Kontrola: '+o.checked_at,'unit-info'));
+ if(o.terms && o.terms!=='akce' && o.terms!=='běžná nabídka')content.appendChild(node('span',o.terms,'item-terms'));
+ main.append(productPhoto(o),content);
+ const comp=node('div',o.other_shop_price!=null?'Srovnání: '+comparison(o):'Srovnání: bez ověřené dvojice','item-compare');
+ const link=node('a','Otevřít na '+(o.shop||'obchodě')+' ↗','item-action');link.href=o.url||'#';link.target='_blank';link.rel='noopener noreferrer';
+ card.append(head,main,comp,link);return card;
+}
+function renderMobile(visible){
+ const sort=$('mobile-sort').value;const offers=[...visible];
+ if(sort==='price')offers.sort((a,b)=>(a.price??Infinity)-(b.price??Infinity));
+ else if(sort==='name')offers.sort((a,b)=>compactProductName(a.name).localeCompare(compactProductName(b.name),'cs'));
+ else offers.sort((a,b)=>(b.discount_pct??0)-(a.discount_pct??0));
+ const list=$('mobile-list');list.replaceChildren();
+ if(!offers.length)list.appendChild(node('div','Žádné nabídky pro zadané filtry.','card-empty'));
+ else for(const o of offers)list.appendChild(makeCard(o));
+ $('mobile-count').textContent=`Zobrazeno ${offers.length} z ${$('viewmode').value==='catalog'?(data?.catalog?.length||0):($('viewmode').value==='historical'?(data?.recent_unconfirmed?.length||0):confirmedOffers(data).length)} položek`;
+}
+function syncQuick(){
+ const shop=$('shop').value,p=$('priority').value;
+ let active='all';if(p==='yes'&&!shop)active='favorites';else if(!p&&shop)active=shop;
+ for(const b of document.querySelectorAll('[data-quick]')){b.classList.toggle('active',b.dataset.quick===active);b.setAttribute('aria-pressed',String(b.dataset.quick===active))}
+}
+function applyFilters(){if(!data)return;const offers=filteredOffers();renderDesktop(offers);renderMobile(offers);syncQuick()}
+async function load(sel='latest'){try{const path=sel==='latest'?'data/latest.json':`data/history/${encodeURIComponent(sel)}.json`;const response=await fetch(path,{cache:'no-store'});if(!response.ok)throw Error('HTTP '+response.status);data=await response.json();refresh()}catch(e){$('alerts').replaceChildren();showError('Nepodařilo se načíst report: '+e.message+'. Zkontroluj GitHub Actions a Pages.')}}
+(async()=>{try{const r=await fetch('data/index.json',{cache:'no-store'});if(r.ok){for(const d of await r.json()){const op=node('option',d);op.value=d;$('date').appendChild(op)}}}catch(e){}const q=new URLSearchParams(location.search).get('date');if(q&&[...$('date').options].some(o=>o.value===q)){$('date').value=q;await load(q)}else await load()})();
+$('date').addEventListener('change',e=>{const url=new URL(location.href);if(e.target.value==='latest')url.searchParams.delete('date');else url.searchParams.set('date',e.target.value);history.replaceState({},'',url);load(e.target.value)});
+for(const id of ['viewmode','brand','category','shop','priority','min','search','mobile-sort'])$(id).addEventListener('input',applyFilters);
+$('filter-toggle').addEventListener('click',()=>{const box=document.querySelector('.toolbar');const expanded=box.classList.toggle('filters-open');$('filter-toggle').setAttribute('aria-expanded',String(expanded));$('filter-toggle').textContent=expanded?'✕ Zavřít filtry':'☷ Filtry'});
+for(const button of document.querySelectorAll('[data-quick]'))button.addEventListener('click',()=>{const type=button.dataset.quick;
+ $('shop').value=(type==='Rohlík'||type==='Košík')?type:'';
+ $('priority').value=type==='favorites'?'yes':'';
+ applyFilters();
+});
+</script>
+</body></html>

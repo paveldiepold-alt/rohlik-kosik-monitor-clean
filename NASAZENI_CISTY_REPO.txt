@@ -1,0 +1,17 @@
+PŘESNÝ POSTUP BEZ GITHUB RECONNECT
+
+1) NEODSTRAŇUJ starý repozitář. Zachovej ho jako zálohu.
+2) Vytvoř nový veřejný repozitář (doporučený název: rohlik-kosik-monitor-clean), s README nebo bez.
+3) ZIP rozbal. Do GitHubu nahraj OBSAH rozbalené složky, NE samotný ZIP ani složku navíc.
+   V hlavním adresáři musí být: monitor.py, catalog_scan.py, config.json, requirements.txt a adresáře docs, tests, .github.
+   Pozor: Windows může skrývat adresář .github. Ověř jej v GitHubu.
+4) Potvrď Commit changes.
+5) Settings > Pages > Build and deployment > Source: GitHub Actions.
+6) Actions > Rohlík Košík – scan and publish > Run workflow > main > Run workflow.
+7) Počkej na dokončení a ověř URL:
+   https://paveldiepold-alt.github.io/rohlik-kosik-monitor-clean/
+8) Pošli screenshot nové stránky a výsledku Actions. Ověříme správné počty, srovnání a pokrytí.
+9) Staré úložiště nemaž, dokud nebude nové stabilní a dokud se nepřepíše odkaz na novou stránku v druhém účtu ChatGPT Free.
+
+Poznámka: Pokud je složka .github přes webový Upload files vynechána, vytvoř workflow ručně v GitHubu na cestě .github/workflows/prices.yml (ze ZIPu).
+Historie starého repozitáře nebude ve čistém projektu automaticky. Pro její přenos je třeba stará data zazálohovat a teprve pak převést.
