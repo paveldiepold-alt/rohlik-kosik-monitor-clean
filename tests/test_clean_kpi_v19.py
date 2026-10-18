@@ -1,7 +1,13 @@
+
+    
+  
 """Tests for conservative matching and non-invented dashboard KPI input."""
 import unittest
 import json
+import datetime as dt
 from pathlib import Path
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
 import monitor, catalog_scan
 CFG=json.loads((Path(__file__).resolve().parents[1]/'config.json').read_text(encoding='utf8'))
 
@@ -31,8 +37,20 @@ class CleanReleaseTests(unittest.TestCase):
         self.assertEqual(r[0]['other_shop_price'],65.9)
         self.assertEqual(r[1]['other_shop_price'],89.9)
     def test_zero_data_was_not_prefilled_with_old_prices(self):
-        x=json.loads((Path(__file__).resolve().parents[1]/'docs/data/latest.json').read_text(encoding='utf8'))
-        self.assertEqual(x['offers'],[])
-        self.assertEqual(x['catalog'],[])
-        self.assertIsNone(x['checked_at'])
+        """A fresh installation must not invent prices; LIVE output is not a fixture.
+
+        docs/data/latest.json is intentionally updated after each real scan.
+        Tests must never require the production report to remain empty.
+        """
+        now = dt.datetime(2026, 10, 18, 18, 33, tzinfo=dt.timezone.utc)
+        with TemporaryDirectory() as temp, patch.object(monitor, 'DATA', Path(temp)):
+            # Start from a genuinely empty, isolated data directory.
+            self.assertEqual(monitor.read_previous(), {})
+            _, output = catalog_scan.process_incremental(
+                CFG, now, {}, [], [], {}, monitor
+            )
+            self.assertEqual(output['offers'], [])
+            self.assertEqual(output['catalog'], [])
+            self.assertEqual(monitor.read_previous(), {})
 if __name__=='__main__': unittest.main()
+
