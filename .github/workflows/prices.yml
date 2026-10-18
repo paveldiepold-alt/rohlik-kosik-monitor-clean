@@ -1,0 +1,79 @@
+name: Rohlík Košík – scan and publish
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  schedule:
+    # 06:25, 12:25, 18:25 UTC; time in Prague varies with DST.
+    - cron: '25 4,10,16 * * *'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: rohlik-kosik-pages
+  cancel-in-progress: false
+
+jobs:
+  scan-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Configure Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+      - name: Unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Collect public sale offers
+        shell: bash
+        run: |
+          set +e
+          python monitor.py
+          EXIT_CODE=$?
+          set -e
+          if [ "$EXIT_CODE" -ne 0 ]; then
+            echo "::warning::Some or all stores failed. The dashboard will show actual source errors; no fabricated discounts."
+            echo "⚠️ Scraper reported an issue (exit $EXIT_CODE); see source status in dashboard." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Persist price history (if permitted)
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/ docs/report.html
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update observed offers and price history [skip ci]"
+            if ! git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              echo "::warning::Could not commit price history; deploying the current scan anyway. Check branch permission."
+              echo "⚠️ History could not be persisted back to repository." >> "$GITHUB_STEP_SUMMARY"
+            fi
+          fi
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+      - name: Deploy website in this same run
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Print final link
+        run: |
+          echo "✅ Dashboard: ${{ steps.deployment.outputs.page_url }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Report: ${{ steps.deployment.outputs.page_url }}report.html" >> "$GITHUB_STEP_SUMMARY"
