@@ -1,11 +1,22 @@
+
+    
+  
 name: Rohlík Košík – scan and publish
 
 on:
   workflow_dispatch:
   push:
     branches: [main]
+    paths:
+      - '.github/workflows/prices.yml'
+      - 'monitor.py'
+      - 'catalog_scan.py'
+      - 'promo_terms.py'
+      - 'config.json'
+      - 'requirements.txt'
+      - 'docs/index.html'
+      - 'tests/**'
   schedule:
-    # Jednou denne 05:25 UTC (06:25 CET / 07:25 CEST), denni kompletni pokus.
     - cron: '25 5 * * *'
 
 permissions:
@@ -13,41 +24,53 @@ permissions:
   pages: write
   id-token: write
 
+# New group: older jobs from the previous workflow cannot hold this queue.
+# A newer upload replaces a waiting/running instance of THIS version.
 concurrency:
-  group: rohlik-kosik-pages
-  cancel-in-progress: false
+  group: rohlik-kosik-collect-v20-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  scan-and-deploy:
+  collect:
+    name: Collect and verify prices
     runs-on: ubuntu-latest
-    timeout-minutes: 55
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    timeout-minutes: 50
+    # IMPORTANT: No environment here. Price collection must never wait
+    # for approval or lock on GitHub Pages.
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           persist-credentials: true
+
       - name: Configure Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-          cache: 'pip'
+          cache: pip
+
       - name: Install dependencies
         run: |
           python -m pip install -r requirements.txt
           python -m playwright install --with-deps chromium
-      - name: Unit tests
+
+      - name: Check required program files
+        run: |
+          test -f monitor.py || (echo '::error::Missing monitor.py' && exit 1)
+          test -f catalog_scan.py || (echo '::error::Missing catalog_scan.py' && exit 1)
+          test -f promo_terms.py || (echo '::error::Missing promo_terms.py in repository root' && exit 1)
+          test -f docs/index.html || (echo '::error::Missing docs/index.html' && exit 1)
+
+      - name: Run unit tests
         run: python -m unittest discover -s tests -v
-      # Capture a reference time so Pages cannot republish an old snapshot
-      # and still mark the workflow green.
-      - name: Mark start of scan
-        shell: bash
+
+      - name: Mark scan start
         run: echo "RK_SCAN_STARTED=$(date -u +%Y-%m-%dT%H:%M:%S%z)" >> "$GITHUB_ENV"
+
       - name: Collect public sale offers
         run: python monitor.py
-      - name: Confirm new report and diagnostics
+
+      - name: Verify this run produced fresh data
         shell: bash
         run: |
           python - <<'PYVERIFY'
@@ -57,51 +80,21 @@ jobs:
           outputs={}
           for name in ('latest.json','search_status.json'):
               path=Path('docs/data')/name
-              if not path.exists(): sys.exit(f'::error::{path} missing: monitor did not publish a report')
+              if not path.exists(): sys.exit(f'::error::{path} missing: scanner produced no output')
               try: data=json.loads(path.read_text(encoding='utf-8'))
               except Exception as exc: sys.exit(f'::error::{path}: invalid JSON: {exc}')
               stamp=dt.datetime.fromisoformat(data['checked_at'])
               if not stamp.tzinfo or stamp < start-dt.timedelta(seconds=60):
-                  sys.exit(f'::error::{path} is STALE ({stamp}); started at {start}')
+                  sys.exit(f'::error::{path} is old ({stamp}); scan started at {start}')
               outputs[name]=data
-          if outputs['latest.json']['checked_at']!=outputs['search_status.json']['checked_at']:
-              sys.exit('::error::latest.json and search_status.json are from different runs')
+          if outputs['latest.json']['checked_at'] != outputs['search_status.json']['checked_at']:
+              sys.exit('::error::latest.json and search_status.json do not match')
           cov=outputs['latest.json'].get('catalog_coverage',{})
           if not cov.get('scan_plan_version') or cov.get('run_attempted') is None:
-              sys.exit('::error::Old scanner/diagnostic version: missing per-run counters')
-          if cov.get('scan_plan_version')!=outputs['search_status.json'].get('coverage',{}).get('scan_plan_version'):
-              sys.exit('::error::Diagnostics scanner version mismatch')
-          print('Verified NEW data:',outputs['latest.json']['checked_at'],cov['scan_plan_version'])
-          print(f"Scan jobs: {cov.get('run_attempted')}/{cov.get('run_planned')}; product matches: {len(outputs['latest.json'].get('catalog',[]))}; offers: {len(outputs['latest.json'].get('offers',[]))}")
+              sys.exit('::error::Missing scan version or per-run counters')
+          if cov.get('scan_plan_version') != outputs['search_status.json'].get('coverage',{}).get('scan_plan_version'):
+              sys.exit('::error::Scan version mismatch')
+          print(f"Validated: {outputs['latest.json']['checked_at']} – {cov.get('run_attempted')}/{cov.get('run_planned')} queries")
           with open(os.environ['GITHUB_STEP_SUMMARY'],'a',encoding='utf-8') as f:
-              f.write('\n### Fresh report confirmed\n')
-              f.write(f"Checked at: {outputs['latest.json']['checked_at']}  \n")
-              f.write(f"Planner: {cov['scan_plan_version']}  \n")
-              f.write(f"Scanned this run: {cov.get('run_attempted')}/{cov.get('run_planned')}  \n")
-          PYVERIFY
-      - name: Persist price history (if permitted)
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/data/ docs/report.html
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: update observed offers and price history [skip ci]"
-            if ! git push origin "HEAD:${GITHUB_REF_NAME}"; then
-              echo "::warning::Could not commit price history; deploying the current scan anyway. Check branch permission."
-              echo "⚠️ History could not be persisted back to repository." >> "$GITHUB_STEP_SUMMARY"
-            fi
-          fi
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-      - name: Upload website
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./docs
-      - name: Deploy website in this same run
-        id: deployment
-        uses: actions/deploy-pages@v4
-      - name: Print final link
-        run: |
-          echo "✅ Dashboard: ${{ steps.deployment.outputs.page_url }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "Report: ${{ steps.deployment.outputs.page_url }}report.html" >> "$GITHUB_STEP_SUMMARY"
+              f.write(f"### Fresh price scan\nChecked at: {outputs['latest.json']['checked_at']}  \n")
+
