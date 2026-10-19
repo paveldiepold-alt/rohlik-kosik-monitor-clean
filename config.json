@@ -1,5 +1,5 @@
 {
-  "version": "19.3",
+  "version": "19.4",
   "timezone": "Europe/Prague",
   "monitoring": {
     "favorite_min_discount_pct": 5,
@@ -1811,7 +1811,7 @@
     "max_cards_per_query": 260,
     "cache_retention_hours": 240,
     "price_max_age_hours": 18,
-    "schedule_note": "Při každém spuštění se automaticky sestaví úplný plán z aktuálně sledovaných pravidel pro oba obchody; počet dotazů není předem omezen. Nejdříve maso, uzeniny, sýry, ovoce, zelenina, ostatní potraviny, pak nápoje, nakonec drogerie a úklid. Při HTTP 429, blokaci nebo vypršení časového rozpočtu je kontrola ČÁSTEČNÁ.",
+    "schedule_note": "Dynamický FOOD-FIRST průchod. Pokud narazí na 429 nebo časový limit, další běh pokračuje od rozpracovaného pravidla zvlášť za každý obchod. Stav zobrazuje skutečně provedené/zbývající dotazy a verzi plánovače.",
     "fallback_to_sales_page": true,
     "coverage_window_hours": 240,
     "mode": "all_configured_queries_in_one_run_food_first",
