@@ -1,5 +1,5 @@
 {
-  "version": "19.0-clean",
+  "version": "19.3",
   "timezone": "Europe/Prague",
   "monitoring": {
     "favorite_min_discount_pct": 5,
@@ -1807,14 +1807,16 @@
   "catalog_search": {
     "enabled": true,
     "strategy": "Visible public shop search for every watch rule, all product categories, sale and regular prices.",
-    "max_queries_per_run": 8,
     "scrolls_per_query": 8,
     "max_cards_per_query": 260,
     "cache_retention_hours": 240,
     "price_max_age_hours": 18,
-    "schedule_note": "3 runs/day × at most 8 public searches = at most 24 queries/day, with approximately ten-day rolling coverage. Never promise full current-catalogue coverage. Stop on retailer rate limits; stale prices must not appear as current.",
+    "schedule_note": "Při každém spuštění se automaticky sestaví úplný plán z aktuálně sledovaných pravidel pro oba obchody; počet dotazů není předem omezen. Nejdříve maso, uzeniny, sýry, ovoce, zelenina, ostatní potraviny, pak nápoje, nakonec drogerie a úklid. Při HTTP 429, blokaci nebo vypršení časového rozpočtu je kontrola ČÁSTEČNÁ.",
     "fallback_to_sales_page": true,
-    "coverage_window_hours": 240
+    "coverage_window_hours": 240,
+    "mode": "all_configured_queries_in_one_run_food_first",
+    "max_scan_minutes": 35,
+    "pause_between_queries_seconds": 0.4
   },
   "detail_max_per_run": 12
 }
