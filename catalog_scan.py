@@ -1,4 +1,4 @@
-"""Incremental *whole-catalog-search* watcher for Rohlík / Košík.
+"""One-run, food-first public catalogue search for Rohlík / Košík.
 
 Finds products via the PUBLIC site search box across categories, irrespective
 of whether the product is on sale. No private APIs, authentication, captcha
@@ -14,6 +14,7 @@ import copy
 import datetime as dt
 import json
 import re
+import time
 from dataclasses import asdict
 from pathlib import Path
 from urllib.parse import urlparse
@@ -79,10 +80,49 @@ def plan_queries(config: dict) -> list[dict]:
     return list(dedup.values())
 
 
+# Sort by ACTUAL shopping category, not by the user's historical insertion order.
+# The user wants all selected foods first, then drinks, then non-food goods.
+# Query terms shared between rules inherit the highest-ranking linked category.
+SCAN_PLAN_VERSION = 'food-first-full-dynamic-19.3'
+FOOD_CATEGORY_ORDER = (
+    'Maso',
+    'Uzeniny / šunky', 'Uzeniny / salámy', 'Uzeniny / párky a klobásy',
+    'Sýry / plátkové', 'Sýry / tavené', 'Sýry / plísňové',
+    'Sýry / mozzarella a salátové',
+    'Majonézy', 'Másla a tuky',
+    'Ovoce', 'Zelenina', 'Sladké', 'Těstoviny a rýže',
+    'Nápoje / vody', 'Nápoje / limonády',
+    'Kapesníky / balíčky', 'Kapesníky / krabice',
+    'Papírové utěrky', 'Papír a hygiena',
+    'Kosmetika', 'Dentální hygiena', 'Holení',
+    'Praní', 'Úklid',
+)
+RANK_BY_CATEGORY = {name: index for index, name in enumerate(FOOD_CATEGORY_ORDER)}
+
+
+def balanced_queries(config: dict) -> list[dict]:
+    """All distinct terms; complete FOOD -> DRINKS -> HYGIENE -> CLEANING order.
+
+    Legacy function name retained for compatibility with existing imports/tests.
+    A single term shared across several rules keeps all rule IDs and is sorted
+    by its most important category. No terms are dropped or repeated.
+    """
+    queries = plan_queries(config)
+    by_id = {rule['id']: rule for rule in config.get('watch_rules', [])}
+
+    def rank(query: dict) -> int:
+        ranks = [RANK_BY_CATEGORY.get(by_id.get(rid, {}).get('category'), 999)
+                 for rid in query['rule_ids']]
+        return min(ranks, default=999)
+
+    # Python stable sort keeps the natural rule/query order within each category.
+    return sorted(queries, key=rank)
+
+
 def plan_jobs(config: dict) -> list[dict]:
-    """Interleave stores so each batch covers both, not just one retailer."""
+    """Search every term in both shops, pairing stores within each batch."""
     stores = tuple(config.get('sources', {}).keys())
-    return [{'shop': shop, **plan} for q in plan_queries(config) for shop in stores for plan in [q]]
+    return [{'shop': shop, **plan} for plan in balanced_queries(config) for shop in stores]
 
 
 def job_key(job: dict) -> str:
@@ -237,6 +277,10 @@ def playwright_search_batch(batch: list[dict], cfg: dict) -> dict[str, dict]:
     from playwright.sync_api import sync_playwright
     results={}
     search_cfg=cfg.get('catalog_search', {})
+    # Per-run time budget prevents abrupt GitHub job timeout and allows
+    # publishing partial coverage with an honest status, never false zero sales.
+    deadline=time.monotonic()+60*float(search_cfg.get('max_scan_minutes',35))
+    pause_seconds=max(0,float(search_cfg.get('pause_between_queries_seconds',0.4)))
     with sync_playwright() as p:
         browser=p.chromium.launch(headless=True,args=['--no-sandbox'])
         pages={}
@@ -245,6 +289,10 @@ def playwright_search_batch(batch: list[dict], cfg: dict) -> dict[str, dict]:
         try:
             for job in batch:
                 key=job_key(job);shop=job['shop']
+                if time.monotonic() >= deadline:
+                    results[key]={'status':'skipped_time_budget','items':[],
+                                  'detail':'Vyhledávání zastaveno kvůli časovému limitu jednoho běhu'}
+                    continue
                 if shop in blocked:
                     reason=blocked[shop]
                     status='skipped_rate_limit' if reason=='rate_limited' else 'skipped_search_unavailable'
@@ -259,6 +307,7 @@ def playwright_search_batch(batch: list[dict], cfg: dict) -> dict[str, dict]:
                     max_cards=int(search_cfg.get('max_cards_per_query',260)),
                     scrolls=int(search_cfg.get('scrolls_per_query',8)))
                 results[key]={'status':status,'items':rows,'detail':desc}
+                if pause_seconds: time.sleep(pause_seconds)
                 if status in ('rate_limited','blocked'):
                     blocked.add(shop)
                 elif status=='search_unavailable':
@@ -400,12 +449,19 @@ def process_incremental(cfg: dict, now: dt.datetime, state: dict, jobs: list[dic
     state['items']=cleaned
     states=state['queries']
     recent_queries={k:v for k,v in states.items() if _recent(v.get('checked_at',''),now,24)}
+    # Skipped due to a blocked store/time budget is *not* a checked query.
+    # Keeping skipped statuses in diagnostics is useful, but counting them as
+    # attempts falsely inflates the coverage KPI.
+    attempted_recent={k:v for k,v in recent_queries.items()
+                      if not str(v.get('status','')).startswith('skipped_')}
     coverage_hours=float(cfg.get('catalog_search',{}).get('coverage_window_hours',240))
     rolling_queries={k:v for k,v in states.items() if _recent(v.get('checked_at',''),now,coverage_hours)}
+    attempted_rolling={k:v for k,v in rolling_queries.items()
+                       if not str(v.get('status','')).startswith('skipped_')}
     valid_status=('ok','partial_limit')  # 'no_cards' may mean blocked extraction, not full results
     successful_jobs=[j for j in jobs if (q:=recent_queries.get(job_key(j))) and q['status'] in valid_status]
     by_store={shop:{'planned':len([j for j in jobs if j['shop']==shop]),
-                    'attempted_24h':len([j for j in jobs if j['shop']==shop and job_key(j) in recent_queries]),
+                    'attempted_24h':len([j for j in jobs if j['shop']==shop and job_key(j) in attempted_recent]),
                     'responded_24h':len([j for j in successful_jobs if j['shop']==shop])}
               for shop in cfg.get('sources',{})}
     rule_ids={r['id'] for r in cfg.get('watch_rules',[]) if r.get('enabled') is not False}
@@ -415,12 +471,12 @@ def process_incremental(cfg: dict, now: dt.datetime, state: dict, jobs: list[dic
     failed_recent=[{'query':j['query'],'shop':j['shop'], 'status':recent_queries[job_key(j)]['status']}
                    for j in jobs if job_key(j) in recent_queries and recent_queries[job_key(j)]['status'] not in valid_status]
     coverage={'failed_queries_24h':len(failed_recent),'failed_query_examples':failed_recent[:12],
-              'queries_planned':len(jobs),'queries_checked_24h':len(recent_queries),
+              'queries_planned':len(jobs),'queries_checked_24h':len(attempted_recent),
               'queries_responded_24h':len(successful_jobs),
               'watch_rules_total':len(rule_ids),
               'watch_rules_with_search_24h':len(rule_ids & scanned_rule_ids),
               'coverage_window_hours':coverage_hours,
-              'queries_checked_window':len(rolling_queries),
+              'queries_checked_window':len(attempted_rolling),
               'queries_responded_window':len(rolling_success_jobs),
               'watch_rules_with_search_window':len(rule_ids & rolling_rule_ids),
               'by_store':by_store,'batch_queries':len(batch),
@@ -489,14 +545,19 @@ def run_catalog_monitor(cfg: dict, lib, *, demo: bool = False) -> int:
     state_file=lib.DATA/'catalog_state.json'
     try:state=json.loads(state_file.read_text(encoding='utf-8')) if state_file.exists() else {}
     except (ValueError,OSError):state={}
-    # Config changes add/remove queries. Persist next cursor after every batch.
-    batch,cursor=choose_batch(jobs,int(state.get('cursor',0)),int(cfg['catalog_search'].get('max_queries_per_run',46)))
+    # Every scheduled invocation starts from FOOD and attempts every query.
+    # This does not guarantee all results: blocked or timed-out searches are
+    # recorded separately instead of reported as products without discounts.
+    # Dynamic count: no static number such as 196; extra watch rules, aliases
+    # and new products can add any number of planned search operations.
+    batch,cursor=choose_batch(jobs,0,len(jobs))
     if demo:
         results={job_key(j):{'status':'no_cards','items':[],'detail':'DEMO bez živých dat'} for j in batch}
     else:
         results=playwright_search_batch(batch,cfg)
     updated,output=process_incremental(cfg,now,state,jobs,batch,results,lib)
-    updated['cursor']=cursor
+    updated['cursor']=0  # no multi-run rotation; each run is self-contained
+    updated['schedule_version']=SCAN_PLAN_VERSION
     lib.DATA.mkdir(parents=True,exist_ok=True)
     state_file.write_text(json.dumps(updated,ensure_ascii=False,indent=2),encoding='utf-8')
     previous=lib.read_previous()
