@@ -1,59 +1,90 @@
 {
-  "checked_at": "2026-10-19T06:59+02:00",
+  "checked_at": "2026-10-19T15:39+02:00",
   "coverage": {
-    "failed_queries_24h": 0,
-    "failed_query_examples": [],
+    "failed_queries_24h": 1,
+    "failed_query_examples": [
+      {
+        "query": "Studentská pečeť",
+        "shop": "Rohlík",
+        "status": "rate_limited"
+      }
+    ],
     "queries_planned": 196,
-    "queries_checked_24h": 32,
-    "queries_responded_24h": 32,
+    "queries_checked_24h": 146,
+    "queries_responded_24h": 145,
     "watch_rules_total": 75,
-    "watch_rules_with_search_24h": 19,
+    "watch_rules_with_search_24h": 75,
     "coverage_window_hours": 240.0,
-    "queries_checked_window": 32,
-    "queries_responded_window": 32,
-    "watch_rules_with_search_window": 19,
+    "queries_checked_window": 146,
+    "queries_responded_window": 145,
+    "watch_rules_with_search_window": 75,
     "by_store": {
       "Rohlík": {
         "planned": 98,
-        "attempted_24h": 16,
-        "responded_24h": 16
+        "attempted_24h": 48,
+        "responded_24h": 47
       },
       "Košík": {
         "planned": 98,
-        "attempted_24h": 16,
-        "responded_24h": 16
+        "attempted_24h": 98,
+        "responded_24h": 98
       }
     },
-    "batch_queries": 8,
-    "batch_product_rows_matched": 62,
-    "batch_errors": 0,
+    "batch_queries": 196,
+    "batch_product_rows_matched": 1249,
+    "batch_errors": 51,
     "catalog_completeness_verified": false,
     "warning": "Vyhledávací dotazy napříč katalogy, nikoli úplný export obou e-shopů. Neúplnost, blokace a změny cen jsou možné.",
+    "scan_plan_version": "food-first-resume-partial-19.4",
+    "run_planned": 196,
+    "run_scheduled": 196,
+    "run_attempted": 146,
+    "run_with_results": 145,
+    "run_no_cards": 0,
+    "run_skipped": 50,
+    "run_status_counts": {
+      "ok": 145,
+      "rate_limited": 1,
+      "skipped_rate_limit": 50
+    },
+    "run_start_positions": {
+      "Rohlík": 0,
+      "Košík": 0
+    },
+    "run_next_positions": {
+      "Rohlík": 47,
+      "Košík": 98
+    },
+    "unfinished_by_store": {
+      "Rohlík": 51,
+      "Košík": 0
+    },
+    "run_complete": false,
     "sale_page_fallback": {
       "Rohlík": {
-        "status": "ok",
-        "cards": 283,
-        "matched_offers": 5
+        "status": "skipped_rate_limit",
+        "cards": 0,
+        "detail": "429 při aktuálním vyhledávání; neprovádím další požadavky"
       },
       "Košík": {
         "status": "ok",
-        "cards": 473,
-        "matched_offers": 8
+        "cards": 354,
+        "matched_offers": 7
       }
     }
   },
   "queries": {
     "Rohlík::kuřecí prsní řízky": {
-      "checked_at": "2026-10-18T20:47+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
-      "cards": 65,
+      "cards": 135,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
       "rule_ids": [
         "W001"
       ]
     },
     "Košík::kuřecí prsní řízky": {
-      "checked_at": "2026-10-18T20:47+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 10,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -62,16 +93,16 @@
       ]
     },
     "Rohlík::kuřecí prsa": {
-      "checked_at": "2026-10-18T20:47+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
-      "cards": 179,
+      "cards": 150,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
       "rule_ids": [
         "W001"
       ]
     },
     "Košík::kuřecí prsa": {
-      "checked_at": "2026-10-18T20:47+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 16,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -80,7 +111,7 @@
       ]
     },
     "Rohlík::kuřecí stehna": {
-      "checked_at": "2026-10-18T20:47+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 29,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -89,7 +120,7 @@
       ]
     },
     "Košík::kuřecí stehna": {
-      "checked_at": "2026-10-18T20:47+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 28,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -98,16 +129,16 @@
       ]
     },
     "Rohlík::kuřecí paličky": {
-      "checked_at": "2026-10-18T20:47+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
-      "cards": 11,
+      "cards": 17,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
       "rule_ids": [
         "W002"
       ]
     },
     "Košík::kuřecí paličky": {
-      "checked_at": "2026-10-18T20:47+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 14,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -116,7 +147,7 @@
       ]
     },
     "Rohlík::vepřová krkovice": {
-      "checked_at": "2026-10-18T21:00+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 25,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -125,7 +156,7 @@
       ]
     },
     "Košík::vepřová krkovice": {
-      "checked_at": "2026-10-18T21:00+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 18,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -134,16 +165,16 @@
       ]
     },
     "Rohlík::vepřová panenka": {
-      "checked_at": "2026-10-18T21:00+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
-      "cards": 159,
+      "cards": 148,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
       "rule_ids": [
         "W004"
       ]
     },
     "Košík::vepřová panenka": {
-      "checked_at": "2026-10-18T21:00+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 11,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -152,16 +183,16 @@
       ]
     },
     "Rohlík::hovězí svíčková": {
-      "checked_at": "2026-10-18T21:00+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
-      "cards": 35,
+      "cards": 34,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
       "rule_ids": [
         "W005"
       ]
     },
     "Košík::hovězí svíčková": {
-      "checked_at": "2026-10-18T21:00+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 25,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -170,16 +201,16 @@
       ]
     },
     "Rohlík::le & co": {
-      "checked_at": "2026-10-18T21:00+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
-      "cards": 209,
+      "cards": 208,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
       "rule_ids": [
         "W006"
       ]
     },
     "Košík::le & co": {
-      "checked_at": "2026-10-18T21:00+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 95,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -188,16 +219,16 @@
       ]
     },
     "Rohlík::le co šunka": {
-      "checked_at": "2026-10-18T21:03+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
-      "cards": 31,
+      "cards": 29,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
       "rule_ids": [
         "W006"
       ]
     },
     "Košík::le co šunka": {
-      "checked_at": "2026-10-18T21:03+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 34,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -206,7 +237,7 @@
       ]
     },
     "Rohlík::chodura": {
-      "checked_at": "2026-10-18T21:03+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 12,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -217,7 +248,7 @@
       ]
     },
     "Košík::chodura": {
-      "checked_at": "2026-10-18T21:03+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 25,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -228,7 +259,7 @@
       ]
     },
     "Rohlík::wein": {
-      "checked_at": "2026-10-18T21:03+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 3,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -237,7 +268,7 @@
       ]
     },
     "Košík::wein": {
-      "checked_at": "2026-10-18T21:03+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 18,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -246,7 +277,7 @@
       ]
     },
     "Rohlík::kostelecké": {
-      "checked_at": "2026-10-18T21:03+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 4,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -256,7 +287,7 @@
       ]
     },
     "Košík::kostelecké": {
-      "checked_at": "2026-10-18T21:03+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 11,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -266,7 +297,7 @@
       ]
     },
     "Rohlík::kmotr": {
-      "checked_at": "2026-10-19T06:59+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 13,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -275,7 +306,7 @@
       ]
     },
     "Košík::kmotr": {
-      "checked_at": "2026-10-19T06:59+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 4,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -284,7 +315,7 @@
       ]
     },
     "Rohlík::ponnath": {
-      "checked_at": "2026-10-19T06:59+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 11,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -294,7 +325,7 @@
       ]
     },
     "Košík::ponnath": {
-      "checked_at": "2026-10-19T06:59+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 14,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -304,7 +335,7 @@
       ]
     },
     "Rohlík::krahulík": {
-      "checked_at": "2026-10-19T06:59+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 1,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -313,7 +344,7 @@
       ]
     },
     "Košík::krahulík": {
-      "checked_at": "2026-10-19T06:59+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 11,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -322,7 +353,7 @@
       ]
     },
     "Rohlík::madeta": {
-      "checked_at": "2026-10-19T06:59+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 66,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -333,7 +364,7 @@
       ]
     },
     "Košík::madeta": {
-      "checked_at": "2026-10-19T06:59+02:00",
+      "checked_at": "2026-10-19T15:39+02:00",
       "status": "ok",
       "cards": 66,
       "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
@@ -341,6 +372,1034 @@
         "W017",
         "W022",
         "W028"
+      ]
+    },
+    "Rohlík::leerdammer": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 11,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W018"
+      ]
+    },
+    "Košík::leerdammer": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 7,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W018"
+      ]
+    },
+    "Rohlík::président": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 43,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W019",
+        "W025"
+      ]
+    },
+    "Košík::président": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 38,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W019",
+        "W025"
+      ]
+    },
+    "Rohlík::president plátkový sýr": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 26,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W019"
+      ]
+    },
+    "Košík::president plátkový sýr": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 16,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W019"
+      ]
+    },
+    "Rohlík::želetava": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 2,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W020"
+      ]
+    },
+    "Košík::želetava": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 14,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W020"
+      ]
+    },
+    "Rohlík::smetanito": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 11,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W020"
+      ]
+    },
+    "Košík::smetanito": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 14,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W020"
+      ]
+    },
+    "Rohlík::veselá kráva": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 8,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W021"
+      ]
+    },
+    "Košík::veselá kráva": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 10,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W021"
+      ]
+    },
+    "Rohlík::lipno tavený sýr": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 25,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W022"
+      ]
+    },
+    "Košík::lipno tavený sýr": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 12,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W022"
+      ]
+    },
+    "Rohlík::král sýrů": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 26,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W023"
+      ]
+    },
+    "Košík::král sýrů": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 16,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W023"
+      ]
+    },
+    "Rohlík::král sýrů hermelín": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 23,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W023"
+      ]
+    },
+    "Košík::král sýrů hermelín": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 18,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W023"
+      ]
+    },
+    "Rohlík::sedlčanský": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 7,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W024"
+      ]
+    },
+    "Košík::sedlčanský": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 8,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W024"
+      ]
+    },
+    "Rohlík::galbani": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 17,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W026"
+      ]
+    },
+    "Košík::galbani": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 10,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W026"
+      ]
+    },
+    "Rohlík::galbani mozzarella": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 15,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W026"
+      ]
+    },
+    "Košík::galbani mozzarella": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 8,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W026"
+      ]
+    },
+    "Rohlík::hellmann": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 26,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W027"
+      ]
+    },
+    "Košík::hellmann": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 14,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W027"
+      ]
+    },
+    "Rohlík::hellmann majonéza": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 24,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W027"
+      ]
+    },
+    "Košík::hellmann majonéza": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 13,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W027"
+      ]
+    },
+    "Rohlík::madeta máslo": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 25,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W028"
+      ]
+    },
+    "Košík::madeta máslo": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 10,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W028"
+      ]
+    },
+    "Rohlík::hera": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 39,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W029"
+      ]
+    },
+    "Košík::hera": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 23,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W029"
+      ]
+    },
+    "Rohlík::omega": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 58,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W030"
+      ]
+    },
+    "Košík::omega": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 35,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W030"
+      ]
+    },
+    "Rohlík::rama": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 12,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W031"
+      ]
+    },
+    "Košík::rama": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 7,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W031"
+      ]
+    },
+    "Rohlík::flora": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 33,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W032"
+      ]
+    },
+    "Košík::flora": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 13,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W032"
+      ]
+    },
+    "Rohlík::avokádo": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 45,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W037"
+      ]
+    },
+    "Košík::avokádo": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 16,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W037"
+      ]
+    },
+    "Rohlík::banány": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 208,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W038"
+      ]
+    },
+    "Košík::banány": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 120,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W038"
+      ]
+    },
+    "Rohlík::borůvky": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 164,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W039"
+      ]
+    },
+    "Košík::borůvky": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 120,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W039"
+      ]
+    },
+    "Rohlík::maliny": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 208,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W040"
+      ]
+    },
+    "Košík::maliny": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 26,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W040"
+      ]
+    },
+    "Rohlík::citrony": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 206,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W041"
+      ]
+    },
+    "Košík::citrony": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 118,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W041"
+      ]
+    },
+    "Rohlík::hroznové víno": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 36,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W042"
+      ]
+    },
+    "Košík::hroznové víno": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 48,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W042"
+      ]
+    },
+    "Rohlík::hrozny": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 48,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W042"
+      ]
+    },
+    "Košík::hrozny": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 48,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W042"
+      ]
+    },
+    "Rohlík::okurky": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 53,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W043"
+      ]
+    },
+    "Košík::okurky": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 37,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W043"
+      ]
+    },
+    "Rohlík::rajčata": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 168,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W044"
+      ]
+    },
+    "Košík::rajčata": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 120,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W044"
+      ]
+    },
+    "Rohlík::cherry rajčata": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 28,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W045"
+      ]
+    },
+    "Košík::cherry rajčata": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 16,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W045"
+      ]
+    },
+    "Rohlík::mrkev": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 109,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W046"
+      ]
+    },
+    "Košík::mrkev": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 69,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W046"
+      ]
+    },
+    "Rohlík::papriky": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 90,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W047"
+      ]
+    },
+    "Košík::papriky": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 110,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W047"
+      ]
+    },
+    "Rohlík::studentská pečeť": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "rate_limited",
+      "cards": 0,
+      "detail": "HTTP 429",
+      "rule_ids": [
+        "W048"
+      ]
+    },
+    "Košík::studentská pečeť": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 15,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W048"
+      ]
+    },
+    "Košík::miňonky": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 19,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W049"
+      ]
+    },
+    "Košík::fidorka": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 18,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W050"
+      ]
+    },
+    "Košík::orion koko kokosová tyčinka": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 17,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W051"
+      ]
+    },
+    "Košík::panzani": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 20,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W052"
+      ]
+    },
+    "Košík::panzani těstoviny": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 18,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W052"
+      ]
+    },
+    "Košík::panzani rýže": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 16,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W052"
+      ]
+    },
+    "Košík::aquila": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 5,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W033"
+      ]
+    },
+    "Košík::aquila 1,5 l": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 12,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W033"
+      ]
+    },
+    "Košík::rajec": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 21,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W034"
+      ]
+    },
+    "Košík::rajec 1,5 l": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 11,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W034"
+      ]
+    },
+    "Košík::dobrá voda": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 9,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W035"
+      ]
+    },
+    "Košík::dobrá voda 1,5 l": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 6,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W035"
+      ]
+    },
+    "Košík::coca-cola": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 85,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W036"
+      ]
+    },
+    "Košík::coca-cola original 1,5 l": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 20,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W036"
+      ]
+    },
+    "Košík::coca-cola original 2 l": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 19,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W036"
+      ]
+    },
+    "Košík::zewa": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 21,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W073"
+      ]
+    },
+    "Košík::zewa deluxe standard kapesníky": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 13,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W073"
+      ]
+    },
+    "Košík::kapesníky box 3vrstvé": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 13,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W075"
+      ]
+    },
+    "Košík::kapesníky v krabici": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 19,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W075"
+      ]
+    },
+    "Košík::zewa kapesníky box": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 14,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W075"
+      ]
+    },
+    "Košík::papírové kapesníky box": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 15,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W075"
+      ]
+    },
+    "Košík::kuchyňské papírové utěrky": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 38,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W074"
+      ]
+    },
+    "Košík::papírové utěrky": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 53,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W074"
+      ]
+    },
+    "Košík::zewa papírové utěrky": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 14,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W074"
+      ]
+    },
+    "Košík::zewa toaletní papír": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 10,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W053"
+      ]
+    },
+    "Košík::zewa ubrousky": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 14,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W053"
+      ]
+    },
+    "Košík::linteo": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 56,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W054"
+      ]
+    },
+    "Košík::axe": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 11,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W055"
+      ]
+    },
+    "Košík::axe deodorant": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 16,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W055"
+      ]
+    },
+    "Košík::axe sprchový gel": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 18,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W055"
+      ]
+    },
+    "Košík::syoss": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 42,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W056"
+      ]
+    },
+    "Košík::syoss men intense power": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 19,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W056"
+      ]
+    },
+    "Košík::signal": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 10,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W057"
+      ]
+    },
+    "Košík::colgate": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 36,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W058"
+      ]
+    },
+    "Košík::parodontax": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 11,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W059"
+      ]
+    },
+    "Košík::wilkinson": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 13,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W060"
+      ]
+    },
+    "Košík::wilkinson jednorázová holítka": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 14,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W060"
+      ]
+    },
+    "Košík::ariel": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 38,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W061"
+      ]
+    },
+    "Košík::persil": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 32,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W062"
+      ]
+    },
+    "Košík::lenor": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 28,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W063"
+      ]
+    },
+    "Košík::silan": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 22,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W064"
+      ]
+    },
+    "Košík::vanish": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 18,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W065"
+      ]
+    },
+    "Košík::bref": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 21,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W066"
+      ]
+    },
+    "Košík::wc net": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 16,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W067"
+      ]
+    },
+    "Košík::domestos": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 3,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W068"
+      ]
+    },
+    "Košík::savo": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 23,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W069"
+      ]
+    },
+    "Košík::cif": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 5,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W070"
+      ]
+    },
+    "Košík::clin": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 16,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W071"
+      ]
+    },
+    "Košík::jar": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 28,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W072"
+      ]
+    },
+    "Košík::jar citron": {
+      "checked_at": "2026-10-19T15:39+02:00",
+      "status": "ok",
+      "cards": 8,
+      "detail": "Veřejné výsledky vyhledávání; úplnost neověřena",
+      "rule_ids": [
+        "W072"
       ]
     }
   }
