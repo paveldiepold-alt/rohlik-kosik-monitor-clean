@@ -24,15 +24,32 @@ class WholeCatalogueV16(unittest.TestCase):
         self.assertTrue(any(x['query']=='Aquila' for x in plans))
         self.assertTrue(any(x['query']=='kuchyňské papírové utěrky' for x in plans))
         self.assertTrue(any(x['query']=='Colgate' for x in plans))
-    def test_rotation_covers_every_job_with_rate_limit_friendly_batches(self):
+    def test_single_full_run_includes_every_query(self):
         jobs=plan_jobs(CFG)
-        batch_size=CFG['catalog_search']['max_queries_per_run']
-        self.assertLessEqual(batch_size,8)
-        cursor=0;hit=[]
-        for _ in range((len(jobs)+batch_size-1)//batch_size):
-            batch,cursor=choose_batch(jobs,cursor,batch_size)
-            hit+=list(map(job_key,batch))
-        self.assertEqual(set(hit),set(map(job_key,jobs)))
+        batch_size=len(jobs)  # dynamicky počet dotazů podle aktuálních pravidel
+        batch,cursor=choose_batch(jobs,0,batch_size)
+        self.assertEqual(list(map(job_key,batch)),list(map(job_key,jobs)))
+        self.assertEqual(cursor,0)
+    def test_more_than_196_products_can_be_stored_from_one_query(self):
+        # 196 is not, and never was, a product-count ceiling.
+        job={'shop':'Košík','query':'Hellmann','rule_ids':['W027']}
+        rows=[row('Košík',f'https://www.kosik.cz/p{500000+i}-majoneza',
+                  f"Hellmann's Majonéza Original balení {i} 625 ml") for i in range(220)]
+        _, result=process_incremental(CFG,NOW,{},plan_jobs(CFG),[job],
+            {job_key(job):{'status':'ok','items':rows}},lib)
+        self.assertEqual(len(result['catalog']),220)
+        self.assertEqual(result['coverage']['batch_product_rows_matched'],220)
+
+    def test_skipped_rate_limited_jobs_not_counted_as_checked(self):
+        jobs=plan_jobs(CFG)
+        sample=jobs[:4]
+        statuses=('ok','skipped_rate_limit','search_unavailable','skipped_time_budget')
+        results={job_key(j):{'status':status,'items':[]} for j,status in zip(sample,statuses)}
+        _,out=process_incremental(CFG,NOW,{},jobs,sample,results,lib)
+        self.assertEqual(out['coverage']['queries_checked_24h'],2)
+        self.assertEqual(out['coverage']['queries_responded_24h'],1)
+        self.assertEqual(out['coverage']['batch_errors'],3)
+
     def test_regular_price_in_catalog(self):
         r=row('Košík','https://www.kosik.cz/p123456-majoneza',"Hellmann's Majonéza 625 ml")
         p=row_to_product('Košík',r,CFG,lib,NOW.isoformat())
