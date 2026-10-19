@@ -5,8 +5,8 @@ on:
   push:
     branches: [main]
   schedule:
-    # 06:25, 12:25, 18:25 UTC; time in Prague varies with DST.
-    - cron: '25 4,10,16 * * *'
+    # Jednou denne 05:25 UTC (06:25 CET / 07:25 CEST), denni kompletni pokus.
+    - cron: '25 5 * * *'
 
 permissions:
   contents: write
@@ -20,7 +20,7 @@ concurrency:
 jobs:
   scan-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 55
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
