@@ -329,7 +329,7 @@ def playwright_search_batch(batch: list[dict], cfg: dict) -> dict[str, dict]:
     with sync_playwright() as p:
         browser=p.chromium.launch(headless=True,args=['--no-sandbox'])
         pages={}
-        blocked=set()
+        blocked={}  # obchod -> přesný důvod blokace (rate_limited / blocked / search_unavailable)
         unavailable_count={}
         try:
             for job in batch:
@@ -354,10 +354,10 @@ def playwright_search_batch(batch: list[dict], cfg: dict) -> dict[str, dict]:
                 results[key]={'status':status,'items':rows,'detail':desc}
                 if pause_seconds: time.sleep(pause_seconds)
                 if status in ('rate_limited','blocked'):
-                    blocked.add(shop)
+                    blocked[shop]=status
                 elif status=='search_unavailable':
                     unavailable_count[shop]=unavailable_count.get(shop,0)+1
-                    if unavailable_count[shop]>=2:blocked.add(shop)
+                    if unavailable_count[shop]>=2:blocked[shop]=status
                 else:unavailable_count[shop]=0
         finally:
             browser.close()
