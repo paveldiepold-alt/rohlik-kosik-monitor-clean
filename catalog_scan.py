@@ -18,6 +18,7 @@ import time
 from dataclasses import asdict
 from pathlib import Path
 from urllib.parse import urlparse
+from promo_terms import extract_promotion, is_conditional
 
 QUERY_BY_RULE = {
     'W001': ['kuřecí prsní řízky', 'kuřecí prsa'],
@@ -414,6 +415,14 @@ def row_to_product(shop: str, row: dict, cfg: dict, lib, observed_at: str) -> di
         image=lib.safe_image_url(row.get('image_url',''),url)
         note='Slevu nelze cenově ověřit' if sale else ''
         terms='neověřená akce' if sale else ('běžná nabídka' if price is not None else 'cena nezjištěna')
+    promo = extract_promotion(snippet) if sale and not parsed else None
+    if parsed:
+        promo_fields = {key: getattr(parsed, key) for key in
+                        ('promo_until', 'promo_condition', 'promo_min_qty', 'promo_source')}
+    else:
+        promo_fields = {**(promo or {'promo_until':'','promo_condition':'','promo_min_qty':None}),
+                        'promo_source': 'listing' if promo and
+                            (promo['promo_until'] or promo['promo_condition']) else ''}
     if isinstance(price,float) and not 0<price<100000:price=None
     return {
       'shop':shop, 'name':name,'url':url.split('?')[0],
@@ -426,6 +435,7 @@ def row_to_product(shop: str, row: dict, cfg: dict, lib, observed_at: str) -> di
       'discount_candidate_pct':discount if sale else 0,
       'unit_price':None,'unit_label':'','other_shop_price':None,
       'other_shop':'','other_shop_url':'','comparable_group':'',
+      'promo_checked_at':'', **promo_fields,
     }
 
 
@@ -468,9 +478,14 @@ def process_incremental(cfg: dict, now: dt.datetime, state: dict, jobs: list[dic
                                float(cfg.get('catalog_search',{}).get('price_max_age_hours',18))):
                         for field in ('price','discount_pct','old_price','terms',
                                       'discount_verified','discount_candidate_pct',
-                                      'unit_price','unit_label','checked_at','source_kind'):
+                                      'unit_price','unit_label','checked_at','source_kind',
+                                      'promo_until','promo_condition','promo_min_qty','promo_source','promo_checked_at'):
                             product[field]=existing.get(field)
                         product['price_verified']=True
+                # Keep the detail-page lookup timestamp so we can cover more
+                # products on subsequent runs, rather than revisiting the same 40.
+                if existing.get('promo_checked_at'):
+                    product['promo_checked_at']=existing['promo_checked_at']
                 # Keep a known cached verified image when the current listing lacks one.
                 if not product['image_url'] and existing.get('image_url'):
                     product['image_url']=existing['image_url']
@@ -579,7 +594,7 @@ def compare_catalog_items(items: list[dict],lib,manual_pairs: list[dict] | None 
         item.pop('other_shop',None)
         item.pop('other_shop_url',None)
     for item in items:
-        if not item.get('price_verified') or not isinstance(item.get('price'),(float,int)) or item['price'] <= 0 or not item.get('quantity') or 'množstevní' in (item.get('terms') or ''):continue
+        if not item.get('price_verified') or not isinstance(item.get('price'),(float,int)) or item['price'] <= 0 or not item.get('quantity') or is_conditional(item):continue
         name=lib.normalized(item['name'])
         size=lib.normalized(item['quantity'])
         key=manual_urls.get(item['url'].rstrip('/'))
@@ -692,12 +707,19 @@ def run_catalog_monitor(cfg: dict, lib, *, demo: bool = False) -> int:
     for item in output['catalog']:
         o=offer_by_url.get(item['url'])
         if o:
-            for prop in ('quantity','unit_price','unit_label','image_url','other_shop_price','other_shop','other_shop_url'):
+            for prop in ('quantity','unit_price','unit_label','image_url','other_shop_price','other_shop','other_shop_url',
+                         'promo_until','promo_condition','promo_min_qty','promo_source','promo_checked_at'):
                 item[prop]=o.get(prop,item.get(prop))
             existing=updated['items'].get(item['url'])
-            if existing and item.get('image_url'):
-                existing['image_url']=item['image_url']
-                existing['quantity']=item.get('quantity') or existing.get('quantity','')
+            if existing:
+                if item.get('image_url'):
+                    existing['image_url']=item['image_url']
+                if item.get('quantity'):
+                    existing['quantity']=item['quantity']
+                # Conditions and their lookup timestamps must persist even if
+                # the product photo is unavailable (common on Košík).
+                for field in ('promo_until','promo_condition','promo_min_qty','promo_source','promo_checked_at'):
+                    if item.get(field): existing[field]=item[field]
     # Re-evaluate exact same-product comparisons AFTER fallback products have
     # been added; a cached search result + a promo result may now be a pair.
     compare_catalog_items(output['catalog'],lib,cfg.get('canonical_pairs',[]))

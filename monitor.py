@@ -20,6 +20,7 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
 from zoneinfo import ZoneInfo
+from promo_terms import extract_promotion, is_conditional
 
 ROOT = Path(__file__).resolve().parent
 CONFIG = ROOT / "config.json"
@@ -57,6 +58,11 @@ class Offer:
     unit_price: float | None = None
     unit_label: str = ""   # Kč/l or Kč/kg, only when pack volume is certain
     detail_source: str = ""   # listing / product page
+    promo_until: str = ""        # e.g. 3. 11. (printed on this product)
+    promo_condition: str = ""    # purchase minimum, club card, etc.
+    promo_min_qty: int | None = None
+    promo_source: str = ""       # listing / detail; empty = not established
+    promo_checked_at: str = ""   # last detail-page promotion lookup (even if absent)
 
 
 def normalized(s: str) -> str:
@@ -765,9 +771,11 @@ def parse_card(shop: str, row: dict, config: dict) -> Offer | None:
         threshold = next((int(b.get("min_discount_pct", 15)) for b in config["brands"] if b["name"] == brand), 15)
     if discount < threshold:
         return None
-    conditional = re.search(r"od\s+(\d+)\s*ks", snippet, re.I)
-    terms = f"množstevní akce (od {conditional.group(1)} ks)" if conditional else (
-        "množstevní akce (podmínky ověřit)" if re.search(r"multikup|kup v[ií]c", snippet, re.I) else "akce")
+    promo = extract_promotion(snippet)
+    terms = ("množstevní akce (od %d ks)" % promo['promo_min_qty']
+             if promo['promo_min_qty'] is not None else
+             "množstevní akce (podmínky ověřit)"
+             if 'Množstevní akce' in promo['promo_condition'] else 'akce')
     # If the page only exposes the price after a minimum quantity, treat this
     # offer as quantity-conditional, and never compare it as an ordinary price.
     candidate = row.get("current_price", "")
@@ -803,7 +811,11 @@ def parse_card(shop: str, row: dict, config: dict) -> Offer | None:
     offer = Offer(shop, name, url, price, discount, old_price, brand or label or "Oblíbené", fav,
                   qty, terms, category=category, rule_id=matched_rule.get("id", "") if matched_rule else "",
                   note=note, image_url=safe_image_url(row.get("image_url", ""), url),
-                  detail_source="listing" if qty else "")
+                  detail_source="listing" if qty else "",
+                  promo_until=promo['promo_until'],
+                  promo_condition=promo['promo_condition'],
+                  promo_min_qty=promo['promo_min_qty'],
+                  promo_source="listing" if (promo['promo_until'] or promo['promo_condition']) else "")
     set_unit_price(offer)
     return offer
 
@@ -1025,7 +1037,18 @@ DETAIL_JS = r"""() => {
     })
     .map(resolveImg).filter(Boolean).slice(0,8);
   const images=[schemaImage,metaImage,resolveImg(relevant),link,...productImages].filter(Boolean);
-  return {heading, og_title:ogTitle, size, image_url:images[0]||'', image_candidates:[...new Set(images)]};
+  // Read conditions only from a narrow product-heading/price block, never
+  // the entire page with carousels or similar products.
+  let promoText='';
+  for(let el=h?.parentElement,level=0;el && level<6;el=el.parentElement,level++){
+    const all=(el.innerText||'').trim();
+    if(!all.includes(heading) || all.length>3500)continue;
+    if(/[-−]\s*\d{1,2}\s*%|\d+[,.]\d{2}\s*Kč/.test(all)){
+      promoText=all.split(/(?:Další varianty|Podobné produkty|Mohlo by vás zajímat|Související produkty)/i)[0].slice(0,1350);
+      break;
+    }
+  }
+  return {heading, og_title:ogTitle, size, image_url:images[0]||'', image_candidates:[...new Set(images)], promotion_context:promoText};
 }"""
 
 
@@ -1050,6 +1073,16 @@ def apply_detail(offer: Offer, detail: dict) -> None:
         offer.detail_source = "detail page"
     if not offer.image_url:
         offer.image_url = safe_image_url(detail.get("image_url", ""), offer.url)
+    # Detail data can fill missing conditions, but must not override an
+    # explicit, valid listing condition with a related-product promotion.
+    promo = extract_promotion(detail.get('promotion_context', ''))
+    if promo['promo_until'] and not offer.promo_until:
+        offer.promo_until = promo['promo_until']
+        offer.promo_source = 'detail'
+    if promo['promo_condition'] and not offer.promo_condition:
+        offer.promo_condition = promo['promo_condition']
+        offer.promo_min_qty = promo['promo_min_qty']
+        offer.promo_source = 'detail'
     set_unit_price(offer)
 
 
@@ -1242,8 +1275,13 @@ def enrich_from_product_pages(offers: list[Offer], cfg: dict) -> dict:
     changed from its sale-card value during enrichment.
     """
     max_pages = max(0, min(65, int(cfg.get("detail_max_per_run", 40))))
-    candidates = [o for o in offers if not o.quantity or not (o.image_url.startswith('data/images/'))]
-    candidates.sort(key=lambda o: (not o.favorite, bool(o.quantity), bool(o.image_url)))
+    # Detail-page dates may be absent from listing cards. Check even products
+    # with cached pictures; rotate through as-yet-unchecked products first.
+    candidates = [o for o in offers if not o.quantity or
+                  not o.image_url.startswith('data/images/') or
+                  not o.promo_checked_at]
+    candidates.sort(key=lambda o: (not o.favorite, bool(o.promo_checked_at),
+                                    bool(o.quantity), bool(o.image_url)))
     count=0; filled=0; errors=0; photos=0
     if not candidates or not max_pages:
         return {"visited": 0, "filled": 0, "errors": 0, "photos_cached": 0}
@@ -1262,6 +1300,8 @@ def enrich_from_product_pages(offers: list[Offer], cfg: dict) -> dict:
                     page.wait_for_timeout(1000)
                     before=(offer.quantity,offer.image_url)
                     detail=page.evaluate(DETAIL_JS)
+                    if detail_belongs_to_offer(detail.get('heading', ''), offer.name):
+                        offer.promo_checked_at = dt.datetime.now(ZoneInfo('Europe/Prague')).isoformat(timespec='minutes')
                     apply_detail(offer,detail)
                     if cache_product_photo(offer,page,detail): photos+=1
                     if before != (offer.quantity, offer.image_url):filled+=1
@@ -1308,8 +1348,8 @@ def add_comparisons(offers: list[Offer], pairs: list[dict]) -> None:
         # Auto-matching same generic title without an explicit volume is unsafe.
         if a.comparable_group.startswith('auto:') and not a.quantity:
             continue
-        if a.terms != b.terms:
-            continue  # Conditional prices not equivalent to ordinary discounts.
+        if a.terms != b.terms or is_conditional(a) or is_conditional(b):
+            continue  # Never compare card/multibuy/personalized price with ordinary prices.
         a.other_shop_price, a.other_shop_url, a.other_shop = b.price, b.url, b.shop
         b.other_shop_price, b.other_shop_url, b.other_shop = a.price, a.url, a.shop
 
@@ -1365,7 +1405,9 @@ def build_report(snapshot: dict) -> str:
         lines.append("Žádná ověřená nabídka v dostupném vzorku; neznamená to, že žádná sleva neexistuje.")
     for o in offers[:80]:
         comp = f" | druhý obchod: {o.other_shop} {o.other_shop_price:.2f} Kč" if o.other_shop_price is not None else " | bez ověřeného páru"
-        lines.append(f"{'★ ' if o.favorite else ''}{o.category or o.brand} | {o.shop} | {o.name}" + (f" | balení: {o.quantity}" if o.quantity else " | balení: neuvedeno") + f" | {o.price:.2f} Kč | -{o.discount_pct}% | {o.terms}{comp} | {o.url}" + (f" | POZN.: {o.note}" if o.note else ""))
+        condition=o.promo_condition or o.terms
+        if o.promo_until: condition += ' · do '+o.promo_until
+        lines.append(f"{'★ ' if o.favorite else ''}{o.category or o.brand} | {o.shop} | {o.name}" + (f" | balení: {o.quantity}" if o.quantity else " | balení: neuvedeno") + f" | {o.price:.2f} Kč | -{o.discount_pct}% | {condition}{comp} | {o.url}" + (f" | POZN.: {o.note}" if o.note else ""))
     if len(offers) > 80:
         lines.append(f"Dalších {len(offers) - 80} položek pouze na webovém dashboardu.")
     lines.extend(["Zdroje:"] + [f"{k}: {v}" for k, v in snapshot["source_urls"].items()])
