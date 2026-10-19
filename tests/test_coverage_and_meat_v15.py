@@ -35,6 +35,7 @@ class CoverageMeatV15(unittest.TestCase):
         self.assertGreater(CFG['max_items_per_store'],700)
         self.assertGreater(CFG['max_scroll_rounds'],9)
         ui=(Path(__file__).resolve().parents[1]/'docs/index.html').read_text(encoding='utf-8')
-        self.assertIn('NEÚPLNÝ vzorek',ui)
+        self.assertIn('Částečná kontrola',ui)
+        self.assertIn('Podrobnosti sběru a upozornění',ui)
 
 if __name__ == '__main__':unittest.main()
