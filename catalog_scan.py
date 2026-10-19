@@ -4,9 +4,9 @@ Finds products via the PUBLIC site search box across categories, irrespective
 of whether the product is on sale. No private APIs, authentication, captcha
 bypass, or claim that a retailer's entire catalogue was enumerated.
 
-The planned queries cover every configured shopping rule at both stores. The
-scan is split across recurring runs and persists per-query outcomes and the
-last *observed* prices. A query returning zero rows is not a proof of absence.
+The planned queries cover every configured shopping rule at both stores. The scan attempts the entire dynamic plan on each run when allowed by
+source availability and time budget; an incomplete run resumes from its
+first unfinished query for each shop. Last observed prices are timestamped. A query returning zero rows is not a proof of absence.
 """
 from __future__ import annotations
 
@@ -83,7 +83,7 @@ def plan_queries(config: dict) -> list[dict]:
 # Sort by ACTUAL shopping category, not by the user's historical insertion order.
 # The user wants all selected foods first, then drinks, then non-food goods.
 # Query terms shared between rules inherit the highest-ranking linked category.
-SCAN_PLAN_VERSION = 'food-first-full-dynamic-19.3'
+SCAN_PLAN_VERSION = 'food-first-resume-partial-19.4'
 FOOD_CATEGORY_ORDER = (
     'Maso',
     'Uzeniny / šunky', 'Uzeniny / salámy', 'Uzeniny / párky a klobásy',
@@ -136,6 +136,51 @@ def choose_batch(jobs: list[dict], cursor: int, limit: int) -> tuple[list[dict],
     count = min(max(1, limit), n)
     chosen = [jobs[(cursor + i) % n] for i in range(count)]
     return chosen, (cursor + count) % n
+
+
+# Checkpoints are per shop so one retailer rate-limiting access does not
+# prevent the other retailer from progressing through the watch list.
+# A new rule or a changed scan order invalidates the old checkpoint.
+def scan_plan_signature(jobs: list[dict]) -> str:
+    import hashlib
+    return hashlib.sha256('\n'.join(job_key(j) for j in jobs).encode('utf-8')).hexdigest()[:20]
+
+
+def resume_plan(jobs: list[dict], state: dict) -> tuple[list[dict], dict]:
+    """Return uncompleted jobs while retaining food-first order where possible."""
+    sig=scan_plan_signature(jobs)
+    progress=state.get('scan_progress', {}) if state.get('scan_plan_signature')==sig else {}
+    shops=list(dict.fromkeys(j['shop'] for j in jobs))
+    counts={shop:sum(j['shop']==shop for j in jobs) for shop in shops}
+    offsets={shop:min(max(0,int(progress.get(shop,0))),counts[shop]) for shop in shops}
+    # A shop reaching the end of its cycle begins again on the next run,
+    # even if the other shop was unavailable.
+    offsets={shop:(0 if offsets[shop]>=counts[shop] else offsets[shop]) for shop in shops}
+    idx={shop:0 for shop in shops}
+    selected=[]
+    for j in jobs:
+        shop=j['shop']; pos=idx[shop];idx[shop]+=1
+        if pos>=offsets[shop]: selected.append(j)
+    return selected, offsets
+
+
+def advance_scan_progress(jobs: list[dict], batch: list[dict], results: dict,
+                          starting: dict) -> dict:
+    """Advance through contiguous completed queries; retry blocked/timeouts."""
+    completed={'ok','no_cards','partial_limit'}
+    progress=dict(starting)
+    shops=list(dict.fromkeys(j['shop'] for j in jobs))
+    per_shop={shop:[j for j in jobs if j['shop']==shop] for shop in shops}
+    submitted={job_key(j) for j in batch}
+    for shop, ordered in per_shop.items():
+        pos=progress.get(shop,0)
+        while pos<len(ordered):
+            k=job_key(ordered[pos])
+            if k not in submitted or results.get(k,{}).get('status') not in completed:
+                break
+            pos+=1
+        progress[shop]=pos
+    return progress
 
 
 # Executed against product cards in the *search results* — not the promotions
@@ -431,9 +476,12 @@ def process_incremental(cfg: dict, now: dt.datetime, state: dict, jobs: list[dic
                     product['image_url']=existing['image_url']
                 state['items'][key_item]=product
                 accepted+=1;seen_in_batch.add(key_item)
-        state['queries'][key]={'checked_at':at,'status':status,'cards':len(rows),
-                               'detail':str(res.get('detail',''))[:1400],
-                               'rule_ids':job['rule_ids']}
+        # Never replace a real checked query by an artificial skipped marker.
+        # Otherwise an incomplete scan erases previously verified coverage.
+        if not status.startswith('skipped_'):
+            state['queries'][key]={'checked_at':at,'status':status,'cards':len(rows),
+                                   'detail':str(res.get('detail',''))[:1400],
+                                   'rule_ids':job['rule_ids']}
     retention_hours=int(cfg.get('catalog_search',{}).get('cache_retention_hours',72))
     # Revalidate every cached product against CURRENT watch rules, not just when scanned.
     # This removes prior false positives (e.g. cat food falsely labelled chicken breast).
@@ -469,7 +517,7 @@ def process_incremental(cfg: dict, now: dt.datetime, state: dict, jobs: list[dic
     rolling_success_jobs=[j for j in jobs if (q:=rolling_queries.get(job_key(j))) and q['status'] in valid_status]
     rolling_rule_ids=set(x for j in rolling_success_jobs for x in j['rule_ids'])
     failed_recent=[{'query':j['query'],'shop':j['shop'], 'status':recent_queries[job_key(j)]['status']}
-                   for j in jobs if job_key(j) in recent_queries and recent_queries[job_key(j)]['status'] not in valid_status]
+                   for j in jobs if job_key(j) in recent_queries and recent_queries[job_key(j)]['status'] not in (*valid_status,'no_cards')]
     coverage={'failed_queries_24h':len(failed_recent),'failed_query_examples':failed_recent[:12],
               'queries_planned':len(jobs),'queries_checked_24h':len(attempted_recent),
               'queries_responded_24h':len(successful_jobs),
@@ -483,6 +531,19 @@ def process_incremental(cfg: dict, now: dt.datetime, state: dict, jobs: list[dic
               'batch_product_rows_matched':accepted,'batch_errors':failures,
               'catalog_completeness_verified':False,
               'warning':'Vyhledávací dotazy napříč katalogy, nikoli úplný export obou e-shopů. Neúplnost, blokace a změny cen jsou možné.'}
+    # This run is a different metric from rolling 24h and ten-day coverage.
+    # Include all SKIPPED outcomes in run diagnostics, not as checked queries.
+    run_counts={kind:sum(1 for job in batch if results.get(job_key(job),{}).get('status')==kind)
+                for kind in ('ok','no_cards','partial_limit','rate_limited','blocked',
+                             'search_unavailable','search_unconfirmed','error',
+                             'skipped_time_budget','skipped_rate_limit','skipped_search_unavailable')}
+    coverage.update(scan_plan_version=SCAN_PLAN_VERSION,
+        run_planned=len(jobs), run_scheduled=len(batch),
+        run_attempted=sum(1 for job in batch if not str(results.get(job_key(job),{}).get('status','')).startswith('skipped_')),
+        run_with_results=run_counts['ok']+run_counts['partial_limit'],
+        run_no_cards=run_counts['no_cards'],
+        run_skipped=sum(v for k,v in run_counts.items() if k.startswith('skipped_')),
+        run_status_counts={k:v for k,v in run_counts.items() if v})
     fresh_hours=float(cfg.get('catalog_search',{}).get('price_max_age_hours',18))
     catalog=[];offers=[]
     for item in state['items'].values():
@@ -545,19 +606,25 @@ def run_catalog_monitor(cfg: dict, lib, *, demo: bool = False) -> int:
     state_file=lib.DATA/'catalog_state.json'
     try:state=json.loads(state_file.read_text(encoding='utf-8')) if state_file.exists() else {}
     except (ValueError,OSError):state={}
-    # Every scheduled invocation starts from FOOD and attempts every query.
-    # This does not guarantee all results: blocked or timed-out searches are
-    # recorded separately instead of reported as products without discounts.
-    # Dynamic count: no static number such as 196; extra watch rules, aliases
-    # and new products can add any number of planned search operations.
-    batch,cursor=choose_batch(jobs,0,len(jobs))
+    # Attempt all unfinished queries in one invocation when possible.
+    # A time limit or HTTP 429 leaves a checkpoint so the next run RESUMES,
+    # instead of repeatedly starting at meat and starving later categories.
+    # The number of jobs remains dynamic: no fixed 196-query ceiling.
+    batch,starting=resume_plan(jobs,state)
     if demo:
         results={job_key(j):{'status':'no_cards','items':[],'detail':'DEMO bez živých dat'} for j in batch}
     else:
         results=playwright_search_batch(batch,cfg)
     updated,output=process_incremental(cfg,now,state,jobs,batch,results,lib)
-    updated['cursor']=0  # no multi-run rotation; each run is self-contained
+    updated['scan_plan_signature']=scan_plan_signature(jobs)
+    updated['scan_progress']=advance_scan_progress(jobs,batch,results,starting)
+    updated['cursor']=0  # legacy cursor is unused
     updated['schedule_version']=SCAN_PLAN_VERSION
+    output['coverage']['run_start_positions']=starting
+    output['coverage']['run_next_positions']=updated['scan_progress']
+    output['coverage']['unfinished_by_store']={shop:max(0,sum(j['shop']==shop for j in jobs)-updated['scan_progress'].get(shop,0))
+                                             for shop in cfg.get('sources',{})}
+    output['coverage']['run_complete']=not any(output['coverage']['unfinished_by_store'].values())
     lib.DATA.mkdir(parents=True,exist_ok=True)
     state_file.write_text(json.dumps(updated,ensure_ascii=False,indent=2),encoding='utf-8')
     previous=lib.read_previous()
