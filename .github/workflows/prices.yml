@@ -40,17 +40,45 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Unit tests
         run: python -m unittest discover -s tests -v
+      # Capture a reference time so Pages cannot republish an old snapshot
+      # and still mark the workflow green.
+      - name: Mark start of scan
+        shell: bash
+        run: echo "RK_SCAN_STARTED=$(date -u +%Y-%m-%dT%H:%M:%S%z)" >> "$GITHUB_ENV"
       - name: Collect public sale offers
+        run: python monitor.py
+      - name: Confirm new report and diagnostics
         shell: bash
         run: |
-          set +e
-          python monitor.py
-          EXIT_CODE=$?
-          set -e
-          if [ "$EXIT_CODE" -ne 0 ]; then
-            echo "::warning::Some or all stores failed. The dashboard will show actual source errors; no fabricated discounts."
-            echo "⚠️ Scraper reported an issue (exit $EXIT_CODE); see source status in dashboard." >> "$GITHUB_STEP_SUMMARY"
-          fi
+          python - <<'PYVERIFY'
+          import datetime as dt, json, os, sys
+          from pathlib import Path
+          start=dt.datetime.strptime(os.environ['RK_SCAN_STARTED'],'%Y-%m-%dT%H:%M:%S%z')
+          outputs={}
+          for name in ('latest.json','search_status.json'):
+              path=Path('docs/data')/name
+              if not path.exists(): sys.exit(f'::error::{path} missing: monitor did not publish a report')
+              try: data=json.loads(path.read_text(encoding='utf-8'))
+              except Exception as exc: sys.exit(f'::error::{path}: invalid JSON: {exc}')
+              stamp=dt.datetime.fromisoformat(data['checked_at'])
+              if not stamp.tzinfo or stamp < start-dt.timedelta(seconds=60):
+                  sys.exit(f'::error::{path} is STALE ({stamp}); started at {start}')
+              outputs[name]=data
+          if outputs['latest.json']['checked_at']!=outputs['search_status.json']['checked_at']:
+              sys.exit('::error::latest.json and search_status.json are from different runs')
+          cov=outputs['latest.json'].get('catalog_coverage',{})
+          if not cov.get('scan_plan_version') or cov.get('run_attempted') is None:
+              sys.exit('::error::Old scanner/diagnostic version: missing per-run counters')
+          if cov.get('scan_plan_version')!=outputs['search_status.json'].get('coverage',{}).get('scan_plan_version'):
+              sys.exit('::error::Diagnostics scanner version mismatch')
+          print('Verified NEW data:',outputs['latest.json']['checked_at'],cov['scan_plan_version'])
+          print(f"Scan jobs: {cov.get('run_attempted')}/{cov.get('run_planned')}; product matches: {len(outputs['latest.json'].get('catalog',[]))}; offers: {len(outputs['latest.json'].get('offers',[]))}")
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a',encoding='utf-8') as f:
+              f.write('\n### Fresh report confirmed\n')
+              f.write(f"Checked at: {outputs['latest.json']['checked_at']}  \n")
+              f.write(f"Planner: {cov['scan_plan_version']}  \n")
+              f.write(f"Scanned this run: {cov.get('run_attempted')}/{cov.get('run_planned')}  \n")
+          PYVERIFY
       - name: Persist price history (if permitted)
         shell: bash
         run: |
