@@ -113,8 +113,8 @@ button{font:inherit;cursor:pointer}
 <body>
 <header><h1>🛒 Rohlík × Košík</h1><p>Hlídač slev – značky, oblíbené produkty a ověřené cenové srovnání</p></header>
 <main>
-<div class="warn">NEÚPLNÝ vzorek: rozšířený sběr prochází vyhledávání výrobků ze VŠECH sledovaných kategorií a značek v obou obchodech. Úplnost výsledků je nutné ověřovat podle pokrytí dotazů. Přesné ceny a dostupnost pro PSČ 149 00 nejsou ověřeny. Neúspěšný sběr ≠ žádné slevy.</div>
-<div id="alerts"></div><div id="coverage" class="note" style="margin:10px 3px 14px;padding:9px 12px;background:#e9f4fb;border-radius:8px" aria-live="polite">Kontrola pokrytí katalogu: načítám…</div>
+<div id="scanState" class="warn" role="status">Načítám stav kontroly cen…</div>
+<details id="scanDetails" style="margin:0 0 14px" class="note"><summary style="cursor:pointer;font-weight:700">Podrobnosti sběru a upozornění</summary><div id="coverage" style="margin:9px 2px;line-height:1.7">Načítám diagnostiku…</div><div id="alerts"></div></details>
 <div class="stats">
 <div class="stat"><div id="catalogCount" class="num">–</div><div id="catalogCountCaption" class="cap">Nalezených výrobků (včetně nezlevněných)</div></div>
 <div class="stat"><div id="n" class="num">–</div><div class="cap">Ověřené slevy v dostupném vzorku</div></div>
@@ -222,7 +222,18 @@ function refresh(){
  $('changes').textContent=(data.changes||[]).length;
  const photos=offers.filter(o=>/^data\/images\/[a-f0-9]{22}\.webp$/i.test(o.image_url||'')||isHellmann625(o)).length;
  const cov=data.catalog_coverage;
- $('coverage').textContent=cov?`Vyhledávání s výsledky za 24 h: ${cov.queries_responded_24h}/${cov.queries_planned} dotazů. V období ${Math.round((cov.coverage_window_hours||24)/24)} dní: ${cov.queries_responded_window??cov.queries_responded_24h}/${cov.queries_planned} dotazů a ${cov.watch_rules_with_search_window??cov.watch_rules_with_search_24h}/${cov.watch_rules_total} pravidel. Potíže za 24 h: ${cov.failed_queries_24h||0}. Nalezeno ${data.catalog?.length||0} výrobků (jen část katalogu). Žádný výsledek ≠ produkt neexistuje; stará cena ≠ aktuální cena.`:'Pokrytí katalogu pro tento report není dostupné (starší verze sběru).';
+ const hasNewRunMetrics=!!(cov&&cov.scan_plan_version);
+ const pending=cov?.unfinished_by_store?Object.values(cov.unfinished_by_store).reduce((a,b)=>a+b,0):null;
+ const runChecked=cov?.run_attempted??null;
+ const complete=hasNewRunMetrics&&cov.run_complete===true;
+ $('scanState').textContent=complete
+   ? `Dokončen plán kontrol v tomto běhu (v posledním běhu ${cov.run_attempted}/${cov.run_scheduled} dotazů). Výsledky nejsou úplným exportem katalogu obchodů; ceny pro PSČ 149 00 nejsou ověřené.`
+   : hasNewRunMetrics
+     ? `Částečná kontrola: ${runChecked}/${cov.run_scheduled} dotazů skutečně provedeno v tomto běhu; ${pending} čeká na pokračování. Sledování pokračuje v dalších bězích. PSČ 149 00 není cenově ověřeno.`
+     : 'Částečná kontrola katalogu. Je zveřejněná starší diagnostika bez informací o dokončení aktuálního běhu; úplnost výsledků nelze potvrdit.';
+ $('coverage').textContent=cov
+   ? `Verze plánovače: ${cov.scan_plan_version||'starší verze'} · Tento běh: ${cov.run_attempted??'—'}/${cov.run_scheduled??cov.queries_planned} provedených (úplný plán ${cov.run_planned??cov.queries_planned}), ${cov.run_with_results??'—'} s výsledky, ${cov.run_no_cards??'—'} prázdných, ${cov.run_skipped??'—'} přeskočeno. Pokrytí 24 h: ${cov.queries_checked_24h}/${cov.queries_planned} provedených a ${cov.queries_responded_24h} s výsledky. Za posledních ${Math.round((cov.coverage_window_hours||24)/24)} dní: ${cov.queries_checked_window}/${cov.queries_planned}, pravidla ${cov.watch_rules_with_search_window}/${cov.watch_rules_total}. Nedokončené podle obchodů: ${JSON.stringify(cov.unfinished_by_store||{})}. Chyby za 24 h: ${cov.failed_queries_24h||0}. Chyby a přeskočené kontroly nejsou důkazem, že produkt nemá slevu.`
+   : 'Diagnostika katalogu není k dispozici.';
  $('checked').textContent=`Datum: ${data.date||'—'} · Kontrola: ${data.checked_at||'—'} · PSČ: ${data.delivery?.postal_code||'149 00'} · Veřejné ceny · Fotografie: ${photos}/${offers.length} (včetně 625 ml z předlohy)`;
  $('alerts').replaceChildren();
  if(data.demo)showError('DEMO DATA – uvedené ceny nejsou skutečné.');
@@ -233,7 +244,7 @@ function refresh(){
  }
  const latestFallback=data.catalog_coverage?.sale_page_fallback||{};
  for(const [shop,stat] of Object.entries(latestFallback)){
-   if(stat.status==='ok')showNotice(`${shop}: záložní kontrola akcí dokončena; ${stat.matched_offers??0} vyhovujících akcí. Vyhledávání celého katalogu zůstává neúplné.`);
+   if(stat.status==='ok')showNotice(`${shop}: záložní kontrola akcí: ${stat.matched_offers??0} odpovídajících nabídek. Nepokrývá kompletní katalog.`);
  }
  const unconfirmed=data.recent_unconfirmed||[];
  if(unconfirmed.length)showNotice(`${unconfirmed.length} dříve zachycených akcí nebylo při nynější kontrole znovu potvrzeno. Nezapočítávají se mezi aktuální slevy.`);
@@ -316,7 +327,7 @@ function syncQuick(){
  for(const b of document.querySelectorAll('[data-quick]')){b.classList.toggle('active',b.dataset.quick===active);b.setAttribute('aria-pressed',String(b.dataset.quick===active))}
 }
 function applyFilters(){if(!data)return;const offers=filteredOffers();renderDesktop(offers);renderMobile(offers);syncQuick()}
-async function load(sel='latest'){try{const path=sel==='latest'?'data/latest.json':`data/history/${encodeURIComponent(sel)}.json`;const response=await fetch(path,{cache:'no-store'});if(!response.ok)throw Error('HTTP '+response.status);data=await response.json();refresh()}catch(e){$('alerts').replaceChildren();showError('Nepodařilo se načíst report: '+e.message+'. Zkontroluj GitHub Actions a Pages.')}}
+async function load(sel='latest'){try{const path=sel==='latest'?'data/latest.json':`data/history/${encodeURIComponent(sel)}.json`;const response=await fetch(path,{cache:'no-store'});if(!response.ok)throw Error('HTTP '+response.status);data=await response.json();refresh()}catch(e){$('scanState').textContent='Chyba: nepodařilo se načíst report ('+e.message+').';$('scanDetails').open=true;$('alerts').replaceChildren();showError('Nepodařilo se načíst report: '+e.message+'. Zkontroluj GitHub Actions a Pages.')}}
 (async()=>{try{const r=await fetch('data/index.json',{cache:'no-store'});if(r.ok){for(const d of await r.json()){const op=node('option',d);op.value=d;$('date').appendChild(op)}}}catch(e){}const q=new URLSearchParams(location.search).get('date');if(q&&[...$('date').options].some(o=>o.value===q)){$('date').value=q;await load(q)}else await load()})();
 $('date').addEventListener('change',e=>{const url=new URL(location.href);if(e.target.value==='latest')url.searchParams.delete('date');else url.searchParams.set('date',e.target.value);history.replaceState({},'',url);load(e.target.value)});
 for(const id of ['viewmode','brand','category','shop','priority','min','search','mobile-sort'])$(id).addEventListener('input',applyFilters);
