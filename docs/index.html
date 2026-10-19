@@ -108,6 +108,12 @@ button{font:inherit;cursor:pointer}
   .note{font-size:11px;line-height:1.45}
 }
 @media(min-width:769px){.mobile-filters-toggle{display:none}}
+.promo-cell{min-width:140px;max-width:220px;white-space:normal;vertical-align:middle}
+.promo-condition,.promo-until,.promo-unknown{display:block;font-size:11px;line-height:1.35;margin:2px 0}
+.promo-condition{color:#92400e;font-weight:700}
+.promo-until{color:#17643b;font-weight:700}
+.promo-unknown{color:#64748b}
+.item-terms{display:block}
 </style>
 </head>
 <body>
@@ -265,6 +271,22 @@ function filteredOffers(){
  return source.filter(o=>(!b||o.brand===b)&&(!c||(o.category||'Ostatní')===c)&&(!s||o.shop===s)&&(!p||isPreferred(o))&&Number(o.discount_pct||0)>=m&&displayProductName(o.name).toLocaleLowerCase('cs').includes(q));
 }
 function comparison(o){return o.other_shop_price!=null?`${o.other_shop}: ${money(o.other_shop_price)} (${o.other_shop_price>o.price?'+':''}${(o.other_shop_price-o.price).toFixed(2)} Kč)`:'Bez ověřeného páru'}
+function promoLabel(o){
+ const pieces=[];
+ if(o.promo_condition)pieces.push(o.promo_condition);
+ else if(o.terms && !['akce','běžná nabídka','cena nezjištěna'].includes(o.terms))pieces.push(o.terms);
+ if(o.promo_until)pieces.push('Do '+o.promo_until);
+ return pieces.join(' · ') || (o.discount_pct>0?'Akce – platnost nezjištěna':'—');
+}
+function promoCell(o){
+ const td=document.createElement('td');td.className='promo-cell';
+ const condition=o.promo_condition ||
+   (o.terms && !['akce','běžná nabídka','cena nezjištěna'].includes(o.terms)?o.terms:'');
+ if(condition)td.appendChild(node('span',condition,'promo-condition'));
+ if(o.promo_until)td.appendChild(node('span','Do '+o.promo_until,'promo-until'));
+ if(!condition&&!o.promo_until)td.appendChild(node('span',o.discount_pct>0?'Platnost nezjištěna':'—','promo-unknown'));
+ return td;
+}
 function desktopCell(txt,cls){let td=document.createElement('td');td.appendChild(node('span',txt,cls));return td}
 function productCell(o){const td=document.createElement('td'),wrap=node('div','','product-identity'),details=node('div','','product-text');
  details.appendChild(node('span',displayProductName(o.name),'product-name'));
@@ -283,7 +305,7 @@ function renderDesktop(visible){
  tr.appendChild(desktopCell(o.shop||'—'));
  tr.appendChild(desktopCell(money(o.price)));
  tr.appendChild(desktopCell(o.discount_pct>0?'−'+o.discount_pct+' %':'—',o.discount_pct>0?'good':''));
- tr.appendChild(desktopCell(o.terms||'—',(o.terms||'').startsWith('množstevní')?'tag conditional':''));
+ tr.appendChild(promoCell(o));
  tr.appendChild(desktopCell(comparison(o)));
  const td=document.createElement('td');const a=node('a','Otevřít ↗');a.href=o.url||'#';a.target='_blank';a.rel='noopener noreferrer';td.appendChild(a);tr.appendChild(td);tbody.appendChild(tr);
  }
@@ -305,7 +327,10 @@ function makeCard(o){
  const price=node('div','','price-line');price.append(node('span',money(o.price),'item-price'));if(o.discount_pct>0)price.appendChild(node('span','−'+o.discount_pct+' %','discount-chip'));
  content.append(title,meta,price);
  if($('viewmode').value==='catalog' && o.checked_at)content.appendChild(node('span','Kontrola: '+o.checked_at,'unit-info'));
- if(o.terms && o.terms!=='akce' && o.terms!=='běžná nabídka')content.appendChild(node('span',o.terms,'item-terms'));
+ if(o.promo_condition)content.appendChild(node('span',o.promo_condition,'item-terms'));
+ else if(o.terms && o.terms!=='akce' && o.terms!=='běžná nabídka')content.appendChild(node('span',o.terms,'item-terms'));
+ if(o.promo_until)content.appendChild(node('span','Akce do '+o.promo_until,'promo-until'));
+ else if(o.discount_pct>0)content.appendChild(node('span','Konec akce nezjištěn','promo-unknown'));
  main.append(productPhoto(o),content);
  const comp=node('div',o.other_shop_price!=null?'Srovnání: '+comparison(o):'Srovnání: bez ověřené dvojice','item-compare');
  const link=node('a','Otevřít na '+(o.shop||'obchodě')+' ↗','item-action');link.href=o.url||'#';link.target='_blank';link.rel='noopener noreferrer';
